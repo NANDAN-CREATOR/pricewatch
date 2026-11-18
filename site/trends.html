@@ -105,11 +105,8 @@ function draw() {
   $("more").hidden = list.length <= shown;
 }
 async function trackCall(act, name, kind, g) {
-  let key = ""; try { key = localStorage.getItem("pw_key") || ""; } catch {}
-  if (!key) { key = (window.prompt("Owner passcode (the ADMIN_KEY secret you set in the Space):") || "").trim(); if (!key) return {ok: false, error: "Cancelled."}; }
   if (!client) { const { Client } = await import("https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js"); client = await Client.connect(SPACE); }
-  const r = (await client.predict("/track", [name, kind, g, act, key])).data[0];
-  try { r.ok ? localStorage.setItem("pw_key", key) : /passcode/i.test(r.error || "") && localStorage.removeItem("pw_key"); } catch {}
+  const r = (await client.predict("/track", [name, kind, g, act])).data[0];
   return r;
 }
 $("out").addEventListener("click", async e => {
