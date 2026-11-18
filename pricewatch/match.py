@@ -90,7 +90,12 @@ def explain(product: Product, offer: Offer) -> str | None:
         hard, soft = groups, []
     for group in hard:
         if not (group & title_tokens):
-            return f"missing: {'|'.join(sorted(group))}"
+            # Free-text search: store titles are often shortened ("Levi's Slim Men"). A missing model
+            # number only rejects when the title names a different one (513 vs 511); otherwise the
+            # listing is kept and the image check decides.
+            conflicting = any(any(c.isdigit() for c in t) for t in title_tokens)
+            if product.soft_share >= 1.0 or conflicting:
+                return f"missing: {'|'.join(sorted(group))}"
     if soft:
         need = math.ceil(product.soft_share * len(soft))
         have = sum(1 for g in soft if g & title_tokens)

@@ -49,7 +49,7 @@ def find(req: Request, provider: SearchProvider, embedder: Embedder | None, offe
 
     raw = offers_cache(query) if offers_cache else provider.search(query)
 
-    product = Product(id="adhoc", name=query, category=req.category, gender=req.gender, soft_share=0.6)
+    product = Product(id="adhoc", name=query, category=req.category, gender=req.gender, soft_share=0.5)
     accepted, rejected = filter_offers(product, raw)
     per_store = best_offer_per_store(accepted)
 
