@@ -53,7 +53,7 @@ class SerpApiShopping:
     name = "serpapi"
 
     def __init__(self, api_key: str | None = None, country: str = "in", language: str = "en", timeout: float = 25.0):
-        self.api_key = api_key or os.environ.get("SERPAPI_KEY", "")
+        self.api_key = (api_key or os.environ.get("SERPAPI_KEY", "")).strip().strip("'\"")  # tolerate pasted spaces/quotes
         self.country = country
         self.language = language
         self.timeout = timeout
