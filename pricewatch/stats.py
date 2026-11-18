@@ -65,6 +65,8 @@ def summarize(offers: list[Offer], reference_price: float | None = None) -> dict
             "store": o.store,
             "price": o.price,
             "url": o.url,
+            "title": o.title,
+            "image_url": o.image_url,
             "in_stock": o.in_stock,
             "markup_vs_lowest_pct": pct(o.price, lowest.price),
             "markup_vs_median_pct": pct(o.price, median),

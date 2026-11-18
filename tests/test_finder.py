@@ -207,3 +207,13 @@ def test_first_accepted_falls_through_on_wrong_service_key():
     assert len(chain.search("q")) == 1
     with pytest.raises(SearchError, match="both"):
         FirstAccepted([Bad(), Bad()]).search("q")
+
+
+def test_result_carries_check_time_and_row_details():
+    out = find(Request(query="levis 511 slim fit jeans", category="clothing", gender="men"), FakeProvider(JEANS), FakeEmbedder())
+    assert out["checked_at"].endswith("+00:00")
+    row = out["summary"]["stores"][0]
+    assert row["checked_at"] == out["checked_at"] and row["title"] and row["image_url"].startswith("data:")
+    stamped = find(Request(query="levis 511 slim fit jeans"), FakeProvider([]), None,
+                   offers_cache=lambda q: (list(JEANS), "2026-11-18T10:00:00+00:00"))
+    assert stamped["checked_at"] == "2026-11-18T10:00:00+00:00"

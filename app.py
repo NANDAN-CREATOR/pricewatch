@@ -32,7 +32,7 @@ except Exception as exc:  # the app still works for name-only price search
     EMBEDDER = None
 
 _lock = threading.Lock()
-_cache: dict[str, tuple[float, list]] = {}
+_cache: dict[str, tuple[float, list, str]] = {}
 _budget = {"day": "", "used": 0}
 
 
@@ -43,7 +43,7 @@ def cached_search(query: str):
     with _lock:
         hit = _cache.get(key)
         if hit and now - hit[0] < CACHE_SECONDS:
-            return hit[1]
+            return hit[1], hit[2]
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         if _budget["day"] != today:
             _budget.update(day=today, used=0)
@@ -56,9 +56,10 @@ def cached_search(query: str):
         with _lock:
             _budget["used"] -= 1  # a failed call should not use up the allowance
         raise
+    stamp = datetime.fromtimestamp(now, timezone.utc).isoformat(timespec="seconds")
     with _lock:
-        _cache[key] = (now, offers)
-    return offers
+        _cache[key] = (now, offers, stamp)
+    return offers, stamp
 
 
 def inr(n: float) -> str:

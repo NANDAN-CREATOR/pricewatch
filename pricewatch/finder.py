@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 
 from PIL import Image
 
@@ -47,7 +48,9 @@ def find(req: Request, provider: SearchProvider, embedder: Embedder | None, offe
     if not query:
         raise ValueError("I could not work out a search phrase from the photo. Please type a product name too.")
 
-    raw = offers_cache(query) if offers_cache else provider.search(query)
+    fetched = offers_cache(query) if offers_cache else provider.search(query)
+    # a cache may return (offers, fetched_at_iso) so the page shows when the prices were really read
+    raw, checked_at = fetched if isinstance(fetched, tuple) else (fetched, datetime.now(timezone.utc).isoformat(timespec="seconds"))
 
     product = Product(id="adhoc", name=query, category=req.category, gender=req.gender, soft_share=0.5)
     accepted, rejected = filter_offers(product, raw)
@@ -87,5 +90,6 @@ def find(req: Request, provider: SearchProvider, embedder: Embedder | None, offe
             sim = similarity.get(row["store"])
             row["similarity"] = sim
             row["looks_same"] = None if sim is None else sim >= flag_below
+            row["checked_at"] = checked_at
     return {"query": query, "photo_info": photo_info, "summary": summary, "rejected": rejected,
-            "notes": notes, "listings_found": len(raw)}
+            "notes": notes, "listings_found": len(raw), "checked_at": checked_at}
