@@ -187,7 +187,9 @@ function render(d) {
   (d.notes || []).forEach(n => h += '<div class="msg" style="margin-bottom:12px">' + esc(n) + '</div>');
   const s = d.summary;
   h += '<div class="meta"><h2>Results for “' + esc(d.query) + '”</h2><span class="when">Prices checked ' + esc(when(d.checked_at)) + ' · prices change daily</span></div>';
-  if (!s) { out.innerHTML = h + '<div class="msg">No matching listings. ' + d.listings_found + ' listings were found but none could be confirmed as this product. Try the full model name, for example the brand and model number.</div>'; return; }
+  const left = d.rejected && d.rejected.length ? '<details><summary>' + d.rejected.length + ' listings were left out (wrong model, wrong gender, used, or different picture)</summary><ul>' +
+    d.rejected.slice(0, 40).map(x => '<li>' + esc(x.store) + ': ' + esc(x.title) + ' — ' + esc(x.reason) + '</li>').join("") + '</ul></details>' : "";
+  if (!s) { out.innerHTML = h + '<div class="msg">No matching listings. ' + d.listings_found + ' listings were found but none could be confirmed as this product. Try the full model name, for example the brand and model number.</div>' + left; return; }
   const rows = s.stores.map(r => ({...r, checked_at: r.checked_at || d.checked_at}));
   h += '<div class="stats">' +
     '<div class="stat hl"><small>Lowest price</small><b>' + inr(s.lowest.price) + '</b><span>at ' + esc(s.lowest.store) + '</span></div>' +
@@ -195,8 +197,7 @@ function render(d) {
     '<div class="stat"><small>Average</small><b>' + inr(s.average) + '</b><span>across stores</span></div>' +
     '<div class="stat"><small>Stores compared</small><b>' + s.store_count + '</b><span>' + (rows.length && s.stores[rows.length - 1].markup_vs_lowest_pct != null ? "highest is " + pct(s.stores[rows.length - 1].markup_vs_lowest_pct) + " above lowest" : "") + '</span></div></div>';
   h += '<div class="grid">' + rows.map((r, i) => card(r, i === 0, d)).join("") + '</div>';
-  if (d.rejected && d.rejected.length) h += '<details><summary>' + d.rejected.length + ' listings were left out (wrong model, wrong gender, used, or different picture)</summary><ul>' +
-    d.rejected.slice(0, 40).map(x => '<li>' + esc(x.store) + ': ' + esc(x.title) + ' — ' + esc(x.reason) + '</li>').join("") + '</ul></details>';
+  h += left;
   out.innerHTML = h;
 }
 window.pricewatch = { setFile };
