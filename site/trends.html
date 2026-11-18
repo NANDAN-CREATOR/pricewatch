@@ -39,6 +39,8 @@ th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}th{co
 .err{color:var(--bad);font-size:.88rem;margin-top:8px}
 .note{color:var(--muted);font-size:.85rem;margin-top:8px}
 footer{border-top:1px solid var(--line);background:var(--card);color:var(--muted);font-size:.85rem;padding:20px 0}
+input#q{width:100%;padding:13px 16px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff;margin-bottom:6px}
+button#more{display:block;margin:6px auto 0;padding:10px 20px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit;cursor:pointer}
 </style>
 </head>
 <body>
@@ -48,8 +50,11 @@ footer{border-top:1px solid var(--line);background:var(--card);color:var(--muted
 </div></header>
 <section class="hero"><div class="wrap"><h1>Price trends</h1>
 <p>A search tool shows today's prices. Here the same products are re-checked every other day, so you can see whether a price is actually low, and which stores just dropped.</p></div></section>
-<main><div class="wrap" id="out"><div class="msg">Loading…</div></div></main>
-<footer><div class="wrap">Prices come from Google Shopping listings, checked every other day. History builds up over time: a buy-or-wait signal needs at least 3 checks. Always confirm the price at the store.</div></footer>
+<main><div class="wrap">
+<input id="q" type="search" placeholder="Search tracked products, e.g. boat airdopes" aria-label="Search tracked products">
+<div id="count" class="note"></div><div id="out"><div class="msg">Loading…</div></div>
+<button id="more" type="button" hidden>Show more</button></div></main>
+<footer><div class="wrap">Every product searched on this site is saved and re-checked every other day (most-searched first). History builds up over time: a buy-or-wait signal needs at least 3 checks. Always confirm the price at the store.</div></footer>
 <script>
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -83,9 +88,22 @@ function card(p) {
   return h + '</section>';
 }
 
+let ALL = [], shown = 20;
+function draw() {
+  const toks = $("q").value.toLowerCase().split(/\s+/).filter(Boolean);
+  const list = ALL.filter(p => toks.every(t => p.name.toLowerCase().includes(t)));
+  $("count").textContent = ALL.length ? list.length + " of " + ALL.length + " products with price history" : "";
+  $("out").innerHTML = list.length ? list.slice(0, shown).map(card).join("") :
+    '<div class="msg">' + (ALL.length ? "No tracked product matches. Search it on the main page and it will start building a history." : "No tracked products yet.") + "</div>";
+  $("more").hidden = list.length <= shown;
+}
+$("q").addEventListener("input", () => { shown = 20; draw(); });
+$("more").addEventListener("click", () => { shown += 20; draw(); });
 fetch("trends.json?x=" + Date.now()).then(r => { if (!r.ok) throw 0; return r.json(); }).then(d => {
-  $("out").innerHTML = d.products && d.products.length ? d.products.map(card).join("") : '<div class="msg">No tracked products yet.</div>';
-}).catch(() => { $("out").innerHTML = '<div class="msg"><b>No history yet.</b> The first check runs on the next schedule (every other day). Prices are recorded each time, and charts and buy-or-wait signals appear as the history grows.</div>'; });
+  ALL = (d.products || []).sort((a, b) => (b.checks || 0) - (a.checks || 0) || (b.searches || 0) - (a.searches || 0));
+  $("q").value = new URLSearchParams(location.search).get("q") || "";
+  draw();
+}).catch(() => { $("out").innerHTML = '<div class="msg"><b>No history yet.</b> Every product searched on the main page is saved, and the first checks appear here after the next scheduled run (every other day). Charts and buy-or-wait signals appear as the history grows.</div>'; });
 </script>
 </body>
 </html>

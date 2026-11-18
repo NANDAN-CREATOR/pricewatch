@@ -206,7 +206,7 @@ function seenBefore(d, s) {
   }
   if (!prev || new Date(d.checked_at) - new Date(prev.t) > 36e5) all[key] = {t: d.checked_at, lowest: s.lowest.price};
   try { const keys = Object.keys(all); if (keys.length > 60) delete all[keys[0]]; localStorage.setItem("pw_seen", JSON.stringify(all)); } catch {}
-  return note;
+  return note + '<div class="note" style="margin:8px 0"><a href="trends.html?q=' + encodeURIComponent(d.query) + '">See price trend for this product →</a></div>';
 }
 
 function render(d) {

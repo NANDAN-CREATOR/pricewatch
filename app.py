@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 import gradio as gr
 
 from pricewatch.finder import Request, find
+from pricewatch.inbox import GitHubInbox, make_record
 from pricewatch.search import FirstAccepted, SearchError
 from pricewatch.search.searchapi import SearchApiShopping
 from pricewatch.search.serpapi import SerpApiShopping
@@ -41,6 +42,7 @@ except Exception as exc:  # the app still works for name-only price search
     print(f"[pricewatch] image model unavailable: {exc!r}")
     EMBEDDER = None
 
+INBOX = GitHubInbox()  # saves each search's prices to the GitHub repo so every product builds a history
 _lock = threading.Lock()
 _cache: dict[str, tuple[float, list, str]] = {}
 _budget = {"day": "", "used": 0}
@@ -101,6 +103,7 @@ def search(query, photo, kind, gender, min_similarity):
     )
     try:
         out = find(req, PROVIDER, EMBEDDER, offers_cache=cached_search)
+        INBOX.save(make_record(out, req.gender, req.category))
     except (ValueError, SearchError) as exc:
         return f"**{exc}**", [], ""
 
@@ -148,7 +151,9 @@ def api_find(query, photo, kind, gender, min_similarity):
                   gender={"Men": "men", "Women": "women"}.get(gender),
                   min_similarity=min_similarity)
     try:
-        return {"ok": True, **find(req, PROVIDER, EMBEDDER, offers_cache=cached_search)}
+        out = find(req, PROVIDER, EMBEDDER, offers_cache=cached_search)
+        INBOX.save(make_record(out, req.gender, req.category))
+        return {"ok": True, **out}
     except (ValueError, SearchError) as exc:
         return {"ok": False, "error": str(exc)}
 

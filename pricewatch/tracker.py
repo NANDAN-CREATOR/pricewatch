@@ -40,10 +40,14 @@ def build_trend(product: dict, history: History, latest: dict | None, now: datet
     """Trend block for one product from recorded history plus this run's store details."""
     now = now or datetime.now(timezone.utc)
     cutoff = now - timedelta(days=WINDOW_DAYS)
-    runs: dict[str, list[dict]] = {}
+    by_ts: dict[str, list[dict]] = {}
     for r in history.rows:
         if r["product_id"] == product["id"] and datetime.fromisoformat(r["ts"]) >= cutoff:
-            runs.setdefault(r["ts"], []).append(r)
+            by_ts.setdefault(r["ts"], []).append(r)
+    last_of_day: dict[str, str] = {}
+    for ts in sorted(by_ts):
+        last_of_day[ts[:10]] = ts          # several readings in one day count as one check
+    runs = {ts: by_ts[ts] for ts in last_of_day.values()}
     points = []
     for ts in sorted(runs):
         prices = [r["price"] for r in runs[ts]]
@@ -67,8 +71,9 @@ def build_trend(product: dict, history: History, latest: dict | None, now: datet
 
 
 def run(tracked: list[dict], provider: SearchProvider, history: History, now: datetime | None = None,
-        limit: int = 5, previous: dict | None = None) -> dict:
-    """Search each tracked product, record prices, and return the trends document."""
+        limit: int = 5, previous: dict | None = None, show: list[dict] | None = None) -> dict:
+    """Search each product in `tracked[:limit]`, record prices, and return the trends document for `show`
+    (default: the products just checked)."""
     now = now or datetime.now(timezone.utc)
     previous = previous or {}
     trends = []
@@ -92,29 +97,77 @@ def run(tracked: list[dict], provider: SearchProvider, history: History, now: da
             latest["stores"] = [{k: s.get(k) for k in ("store", "price", "url", "title", "image_url")}
                                 for s in previous[p["id"]]["stores"]]
         trends.append(build_trend(p, history, latest, now))
+    if show is not None:
+        done = {t["id"]: t for t in trends}
+        trends = []
+        for p in show:
+            if p["id"] in done:
+                trends.append(done[p["id"]])
+            else:
+                old = previous.get(p["id"], {}).get("stores") or p.get("stores") or []
+                trends.append(build_trend(p, history, {"stores": old}, now))
     return {"generated_at": now.isoformat(timespec="seconds"), "products": trends}
 
 
+def pick_to_check(registry: dict, budget: int, now: datetime, fresh_hours: int = 20) -> list[dict]:
+    """Products to re-check this run: skip ones already read recently (a visitor's search counts), then the
+    least recently read first, most-searched first among ties."""
+    cutoff = (now - timedelta(hours=fresh_hours)).isoformat(timespec="seconds")
+    due = [p for p in registry.values() if p.get("last_seen", "") < cutoff]
+    due.sort(key=lambda p: (p.get("last_seen", ""), -p.get("searches", 0)))
+    return due[:budget]
+
+
 def main(argv: list[str] | None = None) -> int:
+    import os
+
+    from .inbox import ingest, product_id
     from .search import FirstAccepted
     from .search.searchapi import SearchApiShopping
     from .search.serpapi import SerpApiShopping
 
     root = Path(".")
-    tracked = json.loads((root / "tracked.json").read_text(encoding="utf-8"))["products"]
-    provider = FirstAccepted([SearchApiShopping(), SerpApiShopping()])
+    now = datetime.now(timezone.utc)
+    budget = int(os.environ.get("TRACK_BUDGET", "8"))
+    history = History(root / "data" / "trends.jsonl")
+    reg_path = root / "data" / "products.json"
+    registry: dict = json.loads(reg_path.read_text(encoding="utf-8")) if reg_path.exists() else {}
+
+    for p in json.loads((root / "tracked.json").read_text(encoding="utf-8"))["products"]:  # always-tracked seeds
+        pid = product_id(p["name"], p.get("gender"))
+        registry.setdefault(pid, {"id": pid, "name": p["name"], "category": p.get("category", "general"),
+                                  "gender": p.get("gender"), "searches": 0})
+    used = ingest(root / "data" / "inbox", history, registry)
+    print(f"Folded {used} visitor searches into the history.")
+
     out_path = root / "site" / "trends.json"
     previous = {}
     if out_path.exists():
         previous = {p["id"]: p for p in json.loads(out_path.read_text(encoding="utf-8")).get("products", [])}
-    history = History(root / "data" / "trends.jsonl")
-    doc = run(tracked, provider, history, previous=previous)
-    errors = [p for p in doc["products"] if p.get("error")]
-    if len(errors) == len(doc["products"]):
+    check = pick_to_check(registry, budget, now)
+    doc = {"products": []}
+    errors: list[dict] = []
+    if check:
+        provider = FirstAccepted([SearchApiShopping(), SerpApiShopping()])
+        doc = run(check, provider, history, now=now, limit=len(check), previous=previous)
+        errors = [p for p in doc["products"] if p.get("error")]
+        for p in doc["products"]:
+            if not p.get("error"):
+                registry[p["id"]]["last_seen"] = now.isoformat(timespec="seconds")
+                registry[p["id"]]["stores"] = [{k: s.get(k) for k in ("store", "price", "url")} for s in p["stores"]]
+    if check and len(errors) == len(check) and not used:
         print("Every product failed:", "; ".join(p["error"] for p in errors), file=sys.stderr)
         return 1  # nothing new to commit; make the Action show red
     history.save()
-    out_path.write_text(json.dumps(doc, ensure_ascii=False, indent=1), encoding="utf-8")
+    reg_path.parent.mkdir(parents=True, exist_ok=True)
+    reg_path.write_text(json.dumps(registry, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    shown = sorted(registry.values(), key=lambda p: -p.get("searches", 0))[:300]
+    full = run([], None, history, now=now, previous=previous, show=shown)
+    for t in full["products"]:
+        t["searches"] = registry[t["id"]].get("searches", 0)
+        t["points"] = t["points"][-60:]
+    out_path.write_text(json.dumps(full, ensure_ascii=False), encoding="utf-8")
     for p in doc["products"]:
         print(f"{p['name']}: {p.get('latest_lowest', '-')} ({p['verdict']['text']})" + (f"  ERROR {p['error']}" if p.get("error") else ""))
     return 0

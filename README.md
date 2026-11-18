@@ -126,7 +126,7 @@ Pushes to `main` sync the app to the Space via `.github/workflows/sync-to-hf.yml
 
 ## Price trends (what Google Shopping does not give you)
 
-`tracked.json` lists products that are re-checked every other day by `.github/workflows/track.yml`. Each check
+Every search on the site is saved to `data/inbox/` by the Space (needs the `GH_HISTORY_TOKEN` Space secret: a fine-grained GitHub token with Contents read/write on this repo). The tracker folds those into the history, keeps `data/products.json`, and re-checks the most-searched products within `TRACK_BUDGET` searches per run. `tracked.json` lists always-tracked products that are re-checked every other day by `.github/workflows/track.yml`. Each check
 records every store's price in `data/trends.jsonl`; `site/trends.html` then shows, per product, a chart of the
 lowest and median price over time, which stores dropped since the last check, and a buy-or-wait signal (needs
 3+ checks). It needs one GitHub Actions secret, `SEARCHAPI_KEY`. Each check costs one search per product, so keep
