@@ -163,5 +163,50 @@
    }
   ],
   "tracked": false
+ },
+ "men-tuxedo~men": {
+  "id": "men-tuxedo~men",
+  "name": "men tuxedo",
+  "category": "general",
+  "gender": "men",
+  "searches": 1,
+  "last_seen": "2026-11-18T19:25:22+00:00",
+  "stores": [
+   {
+    "store": "desertcart.in",
+    "price": 14128.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:17526589553020900826,gpcid:3333371458185192477,headlineOfferDocid:16336123846513379447,imageDocid:4803053080876215457,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Blackberrys",
+    "price": 14999.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:6410239307160996312,gpcid:2392629030307251252,headlineOfferDocid:14937923830690814326,imageDocid:14172258629316913920,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "kalkifashion.com",
+    "price": 20999.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:11686786786707041565,imageDocid:13050366034505123391,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Aza Fashions",
+    "price": 24642.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:9450754227451112393,imageDocid:17960344058223443953,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "KALKI",
+    "price": 24950.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:8619275846419182800,gpcid:3335128073506180097,headlineOfferDocid:11849499933706050255,imageDocid:93234406020515200,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Zoop Men",
+    "price": 26990.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:17952830077805874419,gpcid:17390119064419444080,headlineOfferDocid:17063751077879980668,imageDocid:3301248864331754581,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Pernia's Pop Up Shop",
+    "price": 29325.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:96843452795174989,imageDocid:12574104610396765748,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   }
+  ]
  }
 }
