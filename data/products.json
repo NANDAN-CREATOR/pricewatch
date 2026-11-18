@@ -39,7 +39,66 @@
   "name": "Sony WH-1000XM5 headphones",
   "category": "general",
   "gender": null,
-  "searches": 0
+  "searches": 0,
+  "error": null,
+  "last_seen": "2026-11-18T18:57:27+00:00",
+  "stores": [
+   {
+    "store": "surplusdekho.com",
+    "price": 19592.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=headlineOfferDocid:2118061619070060658,imageDocid:2603277240956263643,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "NewAsNew",
+    "price": 21990.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=catalogid:17870427147911145033,gpcid:14247997234042227694,headlineOfferDocid:9136805068202916545,imageDocid:17517681478980002818,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "友和 Yoho",
+    "price": 22609.85,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=catalogid:13127014286083544157,gpcid:7214571783154959426,headlineOfferDocid:1360857491552931946,imageDocid:13311535327291196588,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Microless.com",
+    "price": 22751.75,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=catalogid:6884924529506505289,gpcid:16531805150210657491,headlineOfferDocid:16722586113836248652,imageDocid:8941246004343174832,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Vardiano Retail",
+    "price": 22879.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=headlineOfferDocid:11828596025814553160,imageDocid:7791993966862986831,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Syga India",
+    "price": 25198.2,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=headlineOfferDocid:5484997543987208320,imageDocid:1891164676711547437,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Tata CLiQ - Fashion",
+    "price": 25999.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=catalogid:7787706825284187031,gpcid:5545690770769151633,headlineOfferDocid:6626517460927853720,imageDocid:15679822961562567957,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Amazon.in",
+    "price": 27590.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=catalogid:12461101498106975479,gpcid:7127851869543230210,headlineOfferDocid:6584650344737920542,imageDocid:13508659965755668511,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "amazon.in",
+    "price": 27590.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=headlineOfferDocid:8496897797940067058,imageDocid:13508659965755668511,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "LowestRate Shopping",
+    "price": 31989.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=headlineOfferDocid:10358175134985579929,imageDocid:9433957199126347781,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Frontier AV",
+    "price": 34990.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=headlineOfferDocid:15022832936128867608,imageDocid:1361636408093930044,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   }
+  ]
  },
  "evara-kurti-short-sleeveless-veda~women": {
   "id": "evara-kurti-short-sleeveless-veda~women",
@@ -78,6 +137,32 @@
     "store": "Dri By Himadri",
     "price": 999.0,
     "url": "https://www.google.com/search?ibp=oshop&q=Evara+Veda+short+sleeveless+kurti&prds=catalogid:7545707224976587003,gpcid:17777582389817353061,headlineOfferDocid:13130537353940340647,imageDocid:5282381952988697534,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   }
+  ]
+ },
+ "sony-wh1000xm5": {
+  "id": "sony-wh1000xm5",
+  "name": "Sony WH-1000XM5",
+  "category": "general",
+  "gender": null,
+  "searches": 0,
+  "error": null,
+  "last_seen": "2026-11-18T18:57:27+00:00",
+  "stores": [
+   {
+    "store": "Slickwraps",
+    "price": 2241.92,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5&prds=catalogid:4532271275495878925,gpcid:1713985911983955903,headlineOfferDocid:1834205457246992808,imageDocid:9007901035066927100,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Desertcart.ae",
+    "price": 3433.38,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5&prds=catalogid:6784950865097077046,gpcid:2083134165338950134,headlineOfferDocid:11970819813037606981,imageDocid:13460651678974041862,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "amazon.in",
+    "price": 5276.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5&prds=catalogid:6784950865097077046,gpcid:2083134165338950134,headlineOfferDocid:13785914599359256810,imageDocid:13460651678974041862,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    }
   ]
  }
