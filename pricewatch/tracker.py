@@ -109,7 +109,7 @@ def run(tracked: list[dict], provider: SearchProvider, history: History, now: da
     return {"generated_at": now.isoformat(timespec="seconds"), "products": trends}
 
 
-def pick_to_check(registry: dict, budget: int, now: datetime, fresh_hours: int = 20) -> list[dict]:
+def pick_to_check(registry: dict, budget: int, now: datetime, fresh_hours: int = 6) -> list[dict]:
     """Products to re-check this run: skip ones already read recently (a visitor's search counts), then the
     least recently read first, most-searched first among ties."""
     cutoff = (now - timedelta(hours=fresh_hours)).isoformat(timespec="seconds")
