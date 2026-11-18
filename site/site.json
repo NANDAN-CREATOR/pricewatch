@@ -1,0 +1,359 @@
+{
+  "generated_at": "2026-11-18T14:52:17+00:00",
+  "products": [
+    {
+      "id": "levis-511-slim-jeans-men",
+      "name": "Levi's 511 Slim Fit Jeans (Men)",
+      "category": "clothing",
+      "errors": [],
+      "rejected": [
+        {
+          "store": "StoreE",
+          "title": "Levi's Women's 511 Slim Fit Jeans",
+          "reason": "excluded word: women"
+        },
+        {
+          "store": "StoreA",
+          "title": "Levi's Boys 511 Slim Jeans (Kids)",
+          "reason": "excluded word: boys"
+        },
+        {
+          "store": "StoreC",
+          "title": "Levi's 501 Original Fit Jeans Men",
+          "reason": "missing: 511"
+        },
+        {
+          "store": "StoreF",
+          "title": "Levi's 511 Slim Fit Jeans Men - Pack of 2",
+          "reason": "excluded word: pack"
+        }
+      ],
+      "summary": {
+        "currency": "INR",
+        "lowest": {
+          "store": "StoreB",
+          "price": 2399.0,
+          "url": "https://example.com/b"
+        },
+        "median": 2899.0,
+        "average": 2849.0,
+        "reference_price": 2899.0,
+        "store_count": 4,
+        "stores": [
+          {
+            "store": "StoreB",
+            "price": 2399.0,
+            "url": "https://example.com/b",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 0.0,
+            "markup_vs_median_pct": -17.2,
+            "mrp": 3999.0,
+            "claimed_discount_pct": 40.0,
+            "mrp_inflation_pct": 37.9,
+            "image_match": null,
+            "image_distance": null
+          },
+          {
+            "store": "StoreA",
+            "price": 2799.0,
+            "url": "https://example.com/a",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 16.7,
+            "markup_vs_median_pct": -3.4,
+            "mrp": 4499.0,
+            "claimed_discount_pct": 37.8,
+            "mrp_inflation_pct": 55.2,
+            "image_match": null,
+            "image_distance": null
+          },
+          {
+            "store": "StoreD",
+            "price": 2999.0,
+            "url": "https://example.com/d",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 25.0,
+            "markup_vs_median_pct": 3.4,
+            "mrp": 5999.0,
+            "claimed_discount_pct": 50.0,
+            "mrp_inflation_pct": 106.9,
+            "image_match": null,
+            "image_distance": null
+          },
+          {
+            "store": "StoreC",
+            "price": 3199.0,
+            "url": "https://example.com/c",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 33.3,
+            "markup_vs_median_pct": 10.3,
+            "mrp": 3999.0,
+            "claimed_discount_pct": 20.0,
+            "mrp_inflation_pct": 37.9,
+            "image_match": null,
+            "image_distance": null
+          }
+        ],
+        "outliers": []
+      },
+      "history": [
+        {
+          "date": "2026-11-18",
+          "lowest": 2399.0
+        }
+      ]
+    },
+    {
+      "id": "adidas-essentials-track-pants-women",
+      "name": "Adidas Essentials Track Pants (Women)",
+      "category": "clothing",
+      "errors": [],
+      "rejected": [
+        {
+          "store": "StoreD",
+          "title": "Adidas Essentials Track Pants Men",
+          "reason": "excluded word: men"
+        }
+      ],
+      "summary": {
+        "currency": "INR",
+        "lowest": {
+          "store": "StoreB",
+          "price": 2499.0,
+          "url": "https://example.com/b"
+        },
+        "median": 2799.0,
+        "average": 2765.67,
+        "reference_price": 2799.0,
+        "store_count": 3,
+        "stores": [
+          {
+            "store": "StoreB",
+            "price": 2499.0,
+            "url": "https://example.com/b",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 0.0,
+            "markup_vs_median_pct": -10.7,
+            "mrp": 3999.0,
+            "claimed_discount_pct": 37.5,
+            "mrp_inflation_pct": 42.9,
+            "image_match": null,
+            "image_distance": null
+          },
+          {
+            "store": "StoreA",
+            "price": 2799.0,
+            "url": "https://example.com/a",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 12.0,
+            "markup_vs_median_pct": 0.0,
+            "mrp": 3999.0,
+            "claimed_discount_pct": 30.0,
+            "mrp_inflation_pct": 42.9,
+            "image_match": null,
+            "image_distance": null
+          },
+          {
+            "store": "StoreC",
+            "price": 2999.0,
+            "url": "https://example.com/c",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 20.0,
+            "markup_vs_median_pct": 7.1,
+            "mrp": 3499.0,
+            "claimed_discount_pct": 14.3,
+            "mrp_inflation_pct": 25.0,
+            "image_match": null,
+            "image_distance": null
+          }
+        ],
+        "outliers": []
+      },
+      "history": [
+        {
+          "date": "2026-11-18",
+          "lowest": 2499.0
+        }
+      ]
+    },
+    {
+      "id": "sony-wh1000xm5",
+      "name": "Sony WH-1000XM5",
+      "category": "general",
+      "errors": [],
+      "rejected": [
+        {
+          "store": "StoreE",
+          "title": "Sony WH-1000XM5 (Renewed)",
+          "reason": "excluded word: renewed"
+        },
+        {
+          "store": "StoreA",
+          "title": "Replacement Ear Pads Cover for Sony WH-1000XM5",
+          "reason": "excluded word: cover"
+        },
+        {
+          "store": "StoreC",
+          "title": "Sony WH-1000XM4 Headphones",
+          "reason": "missing: wh1000xm5"
+        }
+      ],
+      "summary": {
+        "currency": "INR",
+        "lowest": {
+          "store": "StoreB",
+          "price": 24990.0,
+          "url": "https://example.com/b"
+        },
+        "median": 27240.0,
+        "average": 27342.5,
+        "reference_price": 27240.0,
+        "store_count": 4,
+        "stores": [
+          {
+            "store": "StoreB",
+            "price": 24990.0,
+            "url": "https://example.com/b",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 0.0,
+            "markup_vs_median_pct": -8.3,
+            "mrp": 39990.0,
+            "claimed_discount_pct": 37.5,
+            "mrp_inflation_pct": 46.8,
+            "image_match": null,
+            "image_distance": null
+          },
+          {
+            "store": "StoreA",
+            "price": 26990.0,
+            "url": "https://example.com/a",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 8.0,
+            "markup_vs_median_pct": -0.9,
+            "mrp": 34990.0,
+            "claimed_discount_pct": 22.9,
+            "mrp_inflation_pct": 28.5,
+            "image_match": null,
+            "image_distance": null
+          },
+          {
+            "store": "StoreC",
+            "price": 27490.0,
+            "url": "https://example.com/c",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 10.0,
+            "markup_vs_median_pct": 0.9,
+            "mrp": 29990.0,
+            "claimed_discount_pct": 8.3,
+            "mrp_inflation_pct": 10.1,
+            "image_match": null,
+            "image_distance": null
+          },
+          {
+            "store": "StoreD",
+            "price": 29900.0,
+            "url": "https://example.com/d",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 19.6,
+            "markup_vs_median_pct": 9.8,
+            "mrp": 49990.0,
+            "claimed_discount_pct": 40.2,
+            "mrp_inflation_pct": 83.5,
+            "image_match": null,
+            "image_distance": null
+          }
+        ],
+        "outliers": []
+      },
+      "history": [
+        {
+          "date": "2026-11-18",
+          "lowest": 24990.0
+        }
+      ]
+    },
+    {
+      "id": "iphone-15-128",
+      "name": "Apple iPhone 15 128GB",
+      "category": "general",
+      "errors": [],
+      "rejected": [
+        {
+          "store": "StoreD",
+          "title": "Apple iPhone 15 256GB Black",
+          "reason": "missing: 128gb"
+        },
+        {
+          "store": "StoreE",
+          "title": "iPhone 15 128GB Tempered Glass Screen Protector",
+          "reason": "excluded word: glass"
+        }
+      ],
+      "summary": {
+        "currency": "INR",
+        "lowest": {
+          "store": "StoreB",
+          "price": 63990.0,
+          "url": "https://example.com/b"
+        },
+        "median": 65900.0,
+        "average": 65463.0,
+        "reference_price": 65900.0,
+        "store_count": 3,
+        "stores": [
+          {
+            "store": "StoreB",
+            "price": 63990.0,
+            "url": "https://example.com/b",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 0.0,
+            "markup_vs_median_pct": -2.9,
+            "mrp": 79900.0,
+            "claimed_discount_pct": 19.9,
+            "mrp_inflation_pct": 21.2,
+            "image_match": null,
+            "image_distance": null
+          },
+          {
+            "store": "StoreA",
+            "price": 65900.0,
+            "url": "https://example.com/a",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 3.0,
+            "markup_vs_median_pct": 0.0,
+            "mrp": 79900.0,
+            "claimed_discount_pct": 17.5,
+            "mrp_inflation_pct": 21.2,
+            "image_match": null,
+            "image_distance": null
+          },
+          {
+            "store": "StoreC",
+            "price": 66499.0,
+            "url": "https://example.com/c",
+            "in_stock": true,
+            "markup_vs_lowest_pct": 3.9,
+            "markup_vs_median_pct": 0.9,
+            "mrp": 69900.0,
+            "claimed_discount_pct": 4.9,
+            "mrp_inflation_pct": 6.1,
+            "image_match": null,
+            "image_distance": null
+          }
+        ],
+        "outliers": [
+          {
+            "store": "StoreF",
+            "price": 149900.0,
+            "title": "Apple iPhone 15 128GB"
+          }
+        ]
+      },
+      "history": [
+        {
+          "date": "2026-11-18",
+          "lowest": 63990.0
+        }
+      ]
+    }
+  ]
+}
