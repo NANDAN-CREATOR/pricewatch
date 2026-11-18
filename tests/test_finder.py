@@ -77,10 +77,11 @@ def test_free_text_requires_model_numbers_but_not_every_word():
     p = Product(id="x", name="sony wh-1000xm5 black headphones", soft_share=0.6)
     assert explain(p, Offer("S", "Sony WH-1000XM5 Wireless Headphones", 25000)) is None  # no "black": ok
     assert explain(p, Offer("S", "Sony WH-1000XM4 Black Headphones", 20000)) is not None  # wrong model number
-    # shortened title with no number at all is kept (image check decides); a different number is rejected
+    # a title that never names the model number can't be verified, so it is rejected
     j = Product(id="j", name="levis 511 slim fit jeans", soft_share=0.5)
-    assert explain(j, Offer("S", "Levi's Slim Men", 3000)) is None
+    assert explain(j, Offer("S", "Levi's Slim Men", 3000)) is not None
     assert explain(j, Offer("S", "Levi's Mens 513 Slim Straight Jeans", 3000)) is not None
+    assert explain(j, Offer("S", "Men's 511 Slim Jeans", 3000)) is None  # brand missing is tolerated
 
 
 # ---------- serpapi parsing ----------
