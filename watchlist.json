@@ -1,0 +1,96 @@
+{
+  "sources": [
+    "shopify",
+    "jsonld",
+    "browser"
+  ],
+  "source_options": {
+    "jsonld": {
+      "delay_seconds": 3.0
+    },
+    "shopify": {
+      "delay_seconds": 3.0
+    },
+    "browser": {
+      "delay_seconds": 5.0,
+      "stores": {
+        "ExampleStore": {
+          "title": "h1",
+          "price": ".price",
+          "mrp": ".mrp",
+          "image": "img.hero",
+          "sold_out_text": "Sold out"
+        }
+      }
+    }
+  },
+  "products": [
+    {
+      "id": "levis-511-slim-jeans-men",
+      "name": "Levi's 511 Slim Fit Jeans (Men)",
+      "category": "clothing",
+      "gender": "men",
+      "must_include": [
+        "levis|levi",
+        "511",
+        "jeans"
+      ],
+      "must_exclude": [
+        "pack",
+        "combo"
+      ],
+      "min_price": 1000,
+      "urls": {},
+      "shopify": {},
+      "pages": {}
+    },
+    {
+      "id": "adidas-essentials-track-pants-women",
+      "name": "Adidas Essentials Track Pants (Women)",
+      "category": "clothing",
+      "gender": "women",
+      "must_include": [
+        "adidas",
+        "track",
+        "pants"
+      ],
+      "min_price": 800,
+      "urls": {},
+      "shopify": {},
+      "pages": {}
+    },
+    {
+      "id": "sony-wh1000xm5",
+      "name": "Sony WH-1000XM5",
+      "must_include": [
+        "sony",
+        "wh1000xm5"
+      ],
+      "min_price": 10000,
+      "urls": {},
+      "pages": {}
+    },
+    {
+      "id": "iphone-15-128",
+      "name": "Apple iPhone 15 128GB",
+      "must_include": [
+        "iphone",
+        "15",
+        "128gb"
+      ],
+      "must_exclude": [
+        "pro",
+        "plus",
+        "max"
+      ],
+      "min_price": 30000,
+      "urls": {},
+      "pages": {}
+    }
+  ],
+  "image_check": {
+    "mode": "flag",
+    "threshold": 10,
+    "delay_seconds": 1.0
+  }
+}

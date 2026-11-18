@@ -1,0 +1,174 @@
+{
+  "sony-wh1000xm5": [
+    {
+      "store": "StoreA",
+      "title": "Sony WH-1000XM5 Wireless Noise Cancelling Headphones (Black)",
+      "price": 26990,
+      "mrp": 34990,
+      "url": "https://example.com/a"
+    },
+    {
+      "store": "StoreB",
+      "title": "Sony WH1000XM5 Bluetooth Headphones - Black",
+      "price": 24990,
+      "mrp": 39990,
+      "url": "https://example.com/b"
+    },
+    {
+      "store": "StoreC",
+      "title": "Sony WH-1000XM5 Headphones with 30hr Battery",
+      "price": 27490,
+      "mrp": 29990,
+      "url": "https://example.com/c"
+    },
+    {
+      "store": "StoreD",
+      "title": "Sony WH-1000XM5 Noise Cancelling Headphones",
+      "price": 29900,
+      "mrp": 49990,
+      "url": "https://example.com/d"
+    },
+    {
+      "store": "StoreE",
+      "title": "Sony WH-1000XM5 (Renewed)",
+      "price": 17500,
+      "url": "https://example.com/e"
+    },
+    {
+      "store": "StoreA",
+      "title": "Replacement Ear Pads Cover for Sony WH-1000XM5",
+      "price": 899,
+      "url": "https://example.com/a2"
+    },
+    {
+      "store": "StoreC",
+      "title": "Sony WH-1000XM4 Headphones",
+      "price": 19990,
+      "url": "https://example.com/c2"
+    }
+  ],
+  "iphone-15-128": [
+    {
+      "store": "StoreA",
+      "title": "Apple iPhone 15 (128 GB) - Black",
+      "price": 65900,
+      "mrp": 79900,
+      "url": "https://example.com/a"
+    },
+    {
+      "store": "StoreB",
+      "title": "Apple iPhone 15 128GB Blue",
+      "price": 63990,
+      "mrp": 79900,
+      "url": "https://example.com/b"
+    },
+    {
+      "store": "StoreC",
+      "title": "Apple iPhone 15 (128GB) Pink",
+      "price": 66499,
+      "mrp": 69900,
+      "url": "https://example.com/c"
+    },
+    {
+      "store": "StoreD",
+      "title": "Apple iPhone 15 256GB Black",
+      "price": 75900,
+      "url": "https://example.com/d"
+    },
+    {
+      "store": "StoreE",
+      "title": "iPhone 15 128GB Tempered Glass Screen Protector",
+      "price": 299,
+      "url": "https://example.com/e"
+    },
+    {
+      "store": "StoreF",
+      "title": "Apple iPhone 15 128GB",
+      "price": 149900,
+      "url": "https://example.com/f"
+    }
+  ],
+  "levis-511-slim-jeans-men": [
+    {
+      "store": "StoreA",
+      "title": "Levi's Men's 511 Slim Fit Jeans (Dark Indigo)",
+      "price": 2799,
+      "mrp": 4499,
+      "url": "https://example.com/a"
+    },
+    {
+      "store": "StoreB",
+      "title": "Levis 511 Slim Fit Men Jeans - Blue",
+      "price": 2399,
+      "mrp": 3999,
+      "url": "https://example.com/b"
+    },
+    {
+      "store": "StoreC",
+      "title": "Levi's 511 Slim Fit Mid Rise Jeans for Men",
+      "price": 3199,
+      "mrp": 3999,
+      "url": "https://example.com/c"
+    },
+    {
+      "store": "StoreD",
+      "title": "Levi's Men 511 Slim Jeans",
+      "price": 2999,
+      "mrp": 5999,
+      "url": "https://example.com/d"
+    },
+    {
+      "store": "StoreE",
+      "title": "Levi's Women's 511 Slim Fit Jeans",
+      "price": 2599,
+      "url": "https://example.com/e"
+    },
+    {
+      "store": "StoreA",
+      "title": "Levi's Boys 511 Slim Jeans (Kids)",
+      "price": 1799,
+      "url": "https://example.com/a2"
+    },
+    {
+      "store": "StoreC",
+      "title": "Levi's 501 Original Fit Jeans Men",
+      "price": 3499,
+      "url": "https://example.com/c2"
+    },
+    {
+      "store": "StoreF",
+      "title": "Levi's 511 Slim Fit Jeans Men - Pack of 2",
+      "price": 5898,
+      "url": "https://example.com/f"
+    }
+  ],
+  "adidas-essentials-track-pants-women": [
+    {
+      "store": "StoreA",
+      "title": "Adidas Women's Essentials Track Pants",
+      "price": 2799,
+      "mrp": 3999,
+      "url": "https://example.com/a"
+    },
+    {
+      "store": "StoreB",
+      "title": "ADIDAS Essentials Track Pants Women Black",
+      "price": 2499,
+      "mrp": 3999,
+      "url": "https://example.com/b"
+    },
+    {
+      "store": "StoreC",
+      "title": "Adidas Essentials Track Pants for Women",
+      "price": 2999,
+      "mrp": 3499,
+      "url": "https://example.com/c"
+    },
+    {
+      "store": "StoreD",
+      "title": "Adidas Essentials Track Pants Men",
+      "price": 2599,
+      "url": "https://example.com/d"
+    }
+  ]
+}
