@@ -35,7 +35,7 @@ def parse_price(value: str | int | float | None) -> float | None:
 
 def tokenize(text: str) -> list[str]:
     """Lowercase tokens; 'WH-1000XM5' -> 'wh1000xm5', '128 GB' -> '128gb'."""
-    text = text.lower()
+    text = text.lower().replace("'", "").replace("\u2019", "")
     text = _INTRA_HYPHEN_RE.sub("", text)
     text = _UNIT_RE.sub(lambda m: m.group(1) + m.group(2), text)
     tokens = [t.strip(".") for t in _NON_ALNUM_RE.split(text)]

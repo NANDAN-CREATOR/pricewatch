@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 
 from .models import Offer
@@ -37,6 +38,7 @@ class Product:
     pages: dict[str, str] = field(default_factory=dict)  # store -> product page (browser source)
     category: str = "general"  # "clothing" turns on the gender / kids rules
     gender: str | None = None  # "men" | "women" | "unisex" (clothing)
+    soft_share: float = 1.0  # <1: for free-text queries, tokens WITHOUT digits only need this share to match
 
     @classmethod
     def from_dict(cls, d: dict) -> "Product":
@@ -79,9 +81,22 @@ def explain(product: Product, offer: Offer) -> str | None:
     if bad:
         return f"excluded word: {sorted(bad)[0]}"
 
-    for group in product.required_groups():
+    groups = product.required_groups()
+    if product.soft_share < 1.0:
+        # model numbers / sizes (tokens with digits) are mandatory; plain words only need a share
+        hard = [g for g in groups if any(c.isdigit() for t in g for c in t)]
+        soft = [g for g in groups if g not in hard]
+    else:
+        hard, soft = groups, []
+    for group in hard:
         if not (group & title_tokens):
             return f"missing: {'|'.join(sorted(group))}"
+    if soft:
+        need = math.ceil(product.soft_share * len(soft))
+        have = sum(1 for g in soft if g & title_tokens)
+        if have < need:
+            missing = [sorted(g)[0] for g in soft if not (g & title_tokens)]
+            return f"missing: {', '.join(missing)}"
 
     if product.min_price is not None and offer.price < product.min_price:
         return f"price below min ({offer.price:g} < {product.min_price:g})"

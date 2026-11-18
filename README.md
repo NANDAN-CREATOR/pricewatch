@@ -113,3 +113,12 @@ site/index.html           static UI reading site.json
 ## Later: where AI can plug in
 
 Matching is rule-based today (`match.py`). The natural upgrade is an embedding + LLM verifier for ambiguous listings behind the same `filter_offers` interface, evaluated against a labelled set.
+
+## Name-or-photo app (Hugging Face Space)
+
+`app.py` is a Gradio app: type a product name and/or upload a photo. It searches stores through
+SerpApi Google Shopping (`SERPAPI_KEY` Space secret), filters wrong products, uses CLIP
+(`openai/clip-vit-base-patch32`) to guess a search phrase from a photo and to check that listing
+pictures match, then shows lowest / median / average and each store's markup. Searches are cached
+12 hours and capped per day (`MAX_SEARCHES_PER_DAY`, default 8) to protect the free quota.
+Pushes to `main` sync the app to the Space via `.github/workflows/sync-to-hf.yml` (needs `HF_TOKEN`).

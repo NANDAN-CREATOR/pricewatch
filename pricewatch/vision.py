@@ -1,0 +1,175 @@
+"""Image understanding with a free Hugging Face model (CLIP).
+
+Two jobs:
+  1. photo -> search phrase ("blue jeans") by zero-shot classification against a word list,
+  2. image <-> image similarity, to check that store listings show the same product.
+
+CLIP maps images and text into one vector space, so "how alike are these two pictures" is just
+the cosine of two vectors. The model is loaded lazily; on a Hugging Face ZeroGPU Space the
+embedding calls are wrapped with @spaces.GPU.
+"""
+
+from __future__ import annotations
+
+import base64
+import io
+import os
+import urllib.request
+from concurrent.futures import ThreadPoolExecutor
+from typing import Protocol
+
+import numpy as np
+from PIL import Image
+
+CLIP_MODEL = "openai/clip-vit-base-patch32"
+ON_SPACE = bool(os.environ.get("SPACE_ID"))
+
+CATEGORIES = [
+    "jeans", "t-shirt", "polo t-shirt", "shirt", "hoodie", "sweatshirt", "jacket", "sweater", "kurta", "saree",
+    "dress", "top", "skirt", "trousers", "shorts", "track pants", "leggings", "sneakers", "running shoes",
+    "sandals", "formal shoes", "boots", "handbag", "backpack", "wallet", "belt", "cap", "watch", "sunglasses",
+    "headphones", "earbuds", "smartphone", "laptop", "water bottle",
+]
+COLORS = ["black", "white", "blue", "navy blue", "red", "green", "olive green", "yellow", "grey", "brown",
+          "beige", "pink", "purple", "orange", "maroon"]
+
+
+class Embedder(Protocol):
+    def embed_images(self, images: list[Image.Image]) -> np.ndarray: ...
+    def embed_texts(self, texts: list[str]) -> np.ndarray: ...
+
+
+def _normalize(x: np.ndarray) -> np.ndarray:
+    return x / np.clip(np.linalg.norm(x, axis=1, keepdims=True), 1e-9, None)
+
+
+class ClipEmbedder:
+    """openai/clip-vit-base-patch32 through transformers. Heavy imports happen on first use."""
+
+    def __init__(self, model_id: str = CLIP_MODEL):
+        self.model_id = model_id
+        self._model = None
+        self._processor = None
+        self._torch = None
+
+    def load(self) -> "ClipEmbedder":
+        if self._model is None:
+            import torch
+            from transformers import CLIPModel, CLIPProcessor
+
+            self._torch = torch
+            self._processor = CLIPProcessor.from_pretrained(self.model_id)
+            model = CLIPModel.from_pretrained(self.model_id).eval()
+            self._model = model.to("cuda") if ON_SPACE else model
+        return self
+
+    def _to_array(self, feats) -> np.ndarray:
+        torch = self._torch
+        if not isinstance(feats, torch.Tensor):  # newer transformers can return an output object
+            feats = feats.pooler_output if hasattr(feats, "pooler_output") else feats[0]
+        return _normalize(feats.detach().float().cpu().numpy())
+
+    def embed_images(self, images: list[Image.Image]) -> np.ndarray:
+        self.load()
+        torch = self._torch
+        inputs = self._processor(images=[i.convert("RGB") for i in images], return_tensors="pt")
+        inputs = {k: v.to(self._model.device) for k, v in inputs.items()}
+        with torch.no_grad():
+            return self._to_array(self._model.get_image_features(**inputs))
+
+    def embed_texts(self, texts: list[str]) -> np.ndarray:
+        self.load()
+        torch = self._torch
+        inputs = self._processor(text=texts, return_tensors="pt", padding=True)
+        inputs = {k: v.to(self._model.device) for k, v in inputs.items()}
+        with torch.no_grad():
+            return self._to_array(self._model.get_text_features(**inputs))
+
+
+def _gpu(fn):
+    """On a ZeroGPU Space, run fn on a GPU slot. Anywhere else, a no-op."""
+    if ON_SPACE:
+        try:
+            import spaces
+
+            return spaces.GPU(fn)
+        except ImportError:
+            pass
+    return fn
+
+
+class GpuEmbedder:
+    """Wraps an embedder so each call runs inside a ZeroGPU slot (required for the Space to start)."""
+
+    def __init__(self, inner: Embedder):
+        self.inner = inner
+
+        @_gpu
+        def _images(images):
+            return inner.embed_images(images)
+
+        @_gpu
+        def _texts(texts):
+            return inner.embed_texts(texts)
+
+        self._images, self._texts = _images, _texts
+
+    def embed_images(self, images):
+        return self._images(images)
+
+    def embed_texts(self, texts):
+        return self._texts(texts)
+
+
+# ---------- photo -> search phrase ----------
+def describe_photo(image: Image.Image, embedder: Embedder, gender: str | None = None) -> dict:
+    """Zero-shot guess of what the photo shows. Returns {"category","color","query"}.
+
+    This names the *kind* of product and its colour. It cannot read brand or model unless
+    that is visible, so the result is a search phrase to refine, not an exact identification.
+    """
+    img = embedder.embed_images([image])[0]
+    cat_vecs = embedder.embed_texts([f"a photo of a {c}" for c in CATEGORIES])
+    category = CATEGORIES[int(np.argmax(cat_vecs @ img))]
+    col_vecs = embedder.embed_texts([f"a photo of a {c} {category}" for c in COLORS])
+    color = COLORS[int(np.argmax(col_vecs @ img))]
+    parts = [color, category]
+    if gender in ("men", "women"):
+        parts.insert(0, gender)
+    return {"category": category, "color": color, "query": " ".join(parts)}
+
+
+# ---------- image <-> image similarity ----------
+def cosine(a: np.ndarray, b: np.ndarray) -> float:
+    return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b) + 1e-9))
+
+
+def consensus_similarity(vectors: np.ndarray) -> np.ndarray:
+    """Similarity of each image to the group's average look. Needs 3+ images to mean anything."""
+    centroid = vectors.mean(axis=0)
+    return np.array([cosine(v, centroid) for v in vectors])
+
+
+def fetch_image(url: str, timeout: float = 10.0, max_bytes: int = 3_000_000) -> Image.Image | None:
+    """Download a listing thumbnail (http(s) or data: URI). None on any problem."""
+    try:
+        if url.startswith("data:"):
+            raw = base64.b64decode(url.split(",", 1)[1])
+        elif url.startswith(("http://", "https://")):
+            req = urllib.request.Request(url, headers={"User-Agent": "pricewatch/0.4"})
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                raw = resp.read(max_bytes + 1)
+            if len(raw) > max_bytes:
+                return None
+        else:
+            return None
+        img = Image.open(io.BytesIO(raw))
+        img.load()
+        return img.convert("RGB")
+    except Exception:
+        return None
+
+
+def fetch_images(urls: list[str]) -> list[Image.Image | None]:
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        return list(pool.map(lambda u: fetch_image(u) if u else None, urls))
