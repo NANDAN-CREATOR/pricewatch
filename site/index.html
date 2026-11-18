@@ -34,8 +34,6 @@ nav a{color:var(--muted);font-size:.95rem;font-weight:500}
 .seg{display:inline-flex;background:#eef0f6;border-radius:10px;padding:3px}
 .seg button{border:0;background:none;padding:7px 14px;border-radius:8px;font:inherit;font-size:.92rem;font-weight:500;color:var(--muted);cursor:pointer}
 .seg button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(15,23,42,.12)}
-.sel{font:inherit;font-size:.92rem;font-weight:500;padding:8px 32px 8px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 12px center;appearance:none;color:var(--ink);cursor:pointer}
-.sel:focus{outline:none;border-color:var(--brand)}
 .lbl{font-size:.8rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-right:8px}
 .drop{position:relative;margin-top:14px;display:flex;align-items:center;gap:14px;border:1.5px dashed #c7cbe0;border-radius:12px;padding:14px 16px;color:var(--muted);cursor:pointer;transition:.15s;background:#fafbff}
 .drop:hover,.drop.over{border-color:var(--brand);background:#f3f2ff}
@@ -106,10 +104,6 @@ footer{border-top:1px solid var(--line);background:var(--card);color:var(--muted
       <input id="q" type="search" placeholder="e.g. Levi's 511 slim fit jeans" autocomplete="off" aria-label="Product name">
     </div>
     <div class="opts">
-      <div><span class="lbl">Country</span><select class="sel" id="country" aria-label="Country">
-        <option value="in">🇮🇳 India</option><option value="us">🇺🇸 United States</option><option value="uk">🇬🇧 United Kingdom</option>
-        <option value="ca">🇨🇦 Canada</option><option value="au">🇦🇺 Australia</option><option value="ae">🇦🇪 UAE</option>
-        <option value="sg">🇸🇬 Singapore</option><option value="de">🇩🇪 Germany</option><option value="fr">🇫🇷 France</option></select></div>
       <div><span class="lbl">Type</span><span class="seg" id="kind"><button aria-pressed="true" data-v="Anything">Anything</button><button aria-pressed="false" data-v="Clothing &amp; shoes">Clothing &amp; shoes</button></span></div>
       <div><span class="lbl">Gender</span><span class="seg" id="gender"><button aria-pressed="true" data-v="Any">Any</button><button aria-pressed="false" data-v="Men">Men</button><button aria-pressed="false" data-v="Women">Women</button></span></div>
     </div>
@@ -133,15 +127,10 @@ import { Client, handle_file } from "https://cdn.jsdelivr.net/npm/@gradio/client
 const SPACE = "Aman519/pricewatch";
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const LOCALE = {INR: "en-IN", USD: "en-US", GBP: "en-GB", CAD: "en-CA", AUD: "en-AU", AED: "en-AE", SGD: "en-SG", EUR: "de-DE"};
-let cur = "INR";
-const inr = n => { try { return new Intl.NumberFormat(LOCALE[cur] || "en-US", {style: "currency", currency: cur, maximumFractionDigits: 0}).format(n); } catch { return cur + " " + Math.round(n); } };
+const inr = n => "₹" + Math.round(n).toLocaleString("en-IN");
 const pct = v => v == null ? null : (v >= 0 ? "+" : "") + v.toFixed(0) + "%";
 const when = iso => { const d = new Date(iso); return isNaN(d) ? "" : d.toLocaleString(undefined, {day:"numeric", month:"short", year:"numeric", hour:"numeric", minute:"2-digit"}); };
 let client, kind = "Anything", gender = "Any", file = null;
-// pick the visitor's country from their browser language (e.g. en-US -> United States); default India
-{ const rg = ((navigator.language || "").split("-")[1] || "").toLowerCase().replace("gb", "uk"), sel = $("country");
-  if (rg && [...sel.options].some(o => o.value === rg)) sel.value = rg; }
 
 for (const [id, set] of [["kind", v => kind = v], ["gender", v => gender = v]])
   $(id).addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
@@ -181,7 +170,7 @@ $("go").onclick = async () => {
   out.innerHTML = '<div class="stats">' + '<div class="sk" style="height:96px"></div>'.repeat(4) + '</div><div class="grid">' + '<div class="sk"></div>'.repeat(4) + '</div>';
   try {
     client ||= await Client.connect(SPACE);
-    const res = await client.predict("/find", [q, file ? handle_file(file) : null, kind, gender, 0.75, $("country").value]);
+    const res = await client.predict("/find", [q, file ? handle_file(file) : null, kind, gender, 0.75]);
     render(res.data[0]);
   } catch (e) { out.innerHTML = '<div class="msg err">Could not reach the search service. ' + esc(e.message || e) + '</div>'; }
   $("go").disabled = false; $("go").textContent = "Find prices";
@@ -212,8 +201,6 @@ function render(d) {
   if (d.photo_info) h += '<div class="guess">' + (file ? '<img src="' + esc($("prev").src) + '" alt="">' : "") + '<div>We read your photo as <b>' + esc(d.photo_info.color + " " + d.photo_info.category) + '</b>. Add the brand and model in the name box for a sharper result.</div></div>';
   (d.notes || []).forEach(n => h += '<div class="msg" style="margin-bottom:12px">' + esc(n) + '</div>');
   const s = d.summary;
-  if (s) cur = s.currency || cur;
-  const cname = $("country").selectedOptions[0].textContent.replace(/^\S+\s/, "");
   h += '<div class="meta"><h2>Results for “' + esc(d.query) + '”</h2><span class="when">Prices checked ' + esc(when(d.checked_at)) + ' · prices change daily</span></div>';
   const left = d.rejected && d.rejected.length ? '<details><summary>' + d.rejected.length + ' listings were left out (wrong model, wrong gender, used, or different picture)</summary><ul>' +
     d.rejected.slice(0, 40).map(x => '<li>' + esc(x.store) + ': ' + esc(x.title) + ' — ' + esc(x.reason) + '</li>').join("") + '</ul></details>' : "";

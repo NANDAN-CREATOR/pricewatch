@@ -15,7 +15,7 @@ import urllib.request
 
 from ..models import Offer
 from ..normalize import parse_price
-from . import SearchAuthError, SearchError, clean_country, currency_for
+from . import SearchAuthError, SearchError
 
 URL = "https://www.searchapi.io/api/v1/search"
 
@@ -47,16 +47,15 @@ def parse_results(data: dict, currency: str = "INR") -> list[Offer]:
 class SearchApiShopping:
     name = "searchapi"
 
-    def __init__(self, api_key: str | None = None, language: str = "en", timeout: float = 40.0):
+    def __init__(self, api_key: str | None = None, country: str = "in", language: str = "en", timeout: float = 40.0):
         key = api_key or os.environ.get("SEARCHAPI_KEY") or os.environ.get("SERPAPI_KEY", "")
         self.api_key = key.strip().strip("'\"")
-        self.language, self.timeout = language, timeout
+        self.country, self.language, self.timeout = country, language, timeout
 
-    def search(self, query: str, country: str = "in") -> list[Offer]:
-        country = clean_country(country)
+    def search(self, query: str) -> list[Offer]:
         if not self.api_key:
             raise SearchError("Search is not configured: add a SEARCHAPI_KEY secret to this Space.")
-        params = {"engine": "google_shopping", "q": query, "gl": country, "hl": self.language}
+        params = {"engine": "google_shopping", "q": query, "gl": self.country, "hl": self.language}
         req = urllib.request.Request(
             f"{URL}?{urllib.parse.urlencode(params)}",
             headers={"Authorization": f"Bearer {self.api_key}", "Accept": "application/json",
@@ -74,4 +73,4 @@ class SearchApiShopping:
             raise SearchError("Could not reach the search API. Try again in a moment.") from None
         if data.get("error") and not data.get("shopping_results"):
             raise SearchError(f"Search returned no results: {data['error']}")
-        return parse_results(data, currency=currency_for(country))
+        return parse_results(data, currency="INR" if self.country == "in" else "USD")

@@ -20,8 +20,8 @@ class FakeProvider:
     def __init__(self, offers):
         self.offers, self.calls = offers, []
 
-    def search(self, query, country="in"):
-        self.calls.append((query, country))
+    def search(self, query):
+        self.calls.append(query)
         return list(self.offers)
 
 
@@ -148,7 +148,7 @@ def test_photo_only_builds_query_from_the_picture():
     provider = FakeProvider([])
     out = find(Request(photo=photo, gender="men"), provider, FakeEmbedder())
     assert out["photo_info"]["category"] in CATEGORIES and out["photo_info"]["color"] in COLORS
-    assert provider.calls[0][0].startswith("men ") and out["summary"] is None
+    assert provider.calls[0].startswith("men ") and out["summary"] is None
 
 
 def test_describe_photo_picks_the_closest_labels():
@@ -201,7 +201,7 @@ def test_first_accepted_falls_through_on_wrong_service_key():
 
     class Bad:
         name = "bad"
-        def search(self, q, c="in"): raise SearchAuthError("no")
+        def search(self, q): raise SearchAuthError("no")
     good = FakeProvider([Offer("S", "x", 1)])
     chain = FirstAccepted([Bad(), good])
     assert len(chain.search("q")) == 1
@@ -215,30 +215,5 @@ def test_result_carries_check_time_and_row_details():
     row = out["summary"]["stores"][0]
     assert row["checked_at"] == out["checked_at"] and row["title"] and row["image_url"].startswith("data:")
     stamped = find(Request(query="levis 511 slim fit jeans"), FakeProvider([]), None,
-                   offers_cache=lambda q, c: (list(JEANS), "2026-11-18T10:00:00+00:00"))
+                   offers_cache=lambda q: (list(JEANS), "2026-11-18T10:00:00+00:00"))
     assert stamped["checked_at"] == "2026-11-18T10:00:00+00:00"
-
-
-def test_country_is_passed_through_and_cleaned():
-    from pricewatch.search import clean_country, currency_for
-    prov = FakeProvider(JEANS[:3])
-    out = find(Request(query="levis 511 jeans", country="US"), prov, None)
-    assert prov.calls[-1][1] == "us" and out["country"] == "us"
-    assert clean_country("zz") == "in" and clean_country(None) == "in" and currency_for("uk") == "GBP"
-
-
-def test_providers_send_gl_and_currency(monkeypatch):
-    import io, json
-    from pricewatch.search import searchapi
-    seen = {}
-
-    class R(io.BytesIO):
-        def __enter__(self): return self
-        def __exit__(self, *a): return False
-
-    def fake_open(req, timeout=0):
-        seen["url"] = req.full_url
-        return R(json.dumps({"shopping_results": [{"title": "Levi's 511 Jeans", "seller": "Macy's", "extracted_price": 59.5}]}).encode())
-    monkeypatch.setattr(searchapi.urllib.request, "urlopen", fake_open)
-    offers = searchapi.SearchApiShopping(api_key="k").search("levis 511", "us")
-    assert "gl=us" in seen["url"] and offers[0].currency == "USD"

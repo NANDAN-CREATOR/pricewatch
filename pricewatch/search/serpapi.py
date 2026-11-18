@@ -11,7 +11,7 @@ import urllib.request
 
 from ..models import Offer
 from ..normalize import parse_price
-from . import SearchAuthError, SearchError, clean_country, currency_for
+from . import SearchAuthError, SearchError
 
 URL = "https://serpapi.com/search.json"
 
@@ -52,16 +52,16 @@ def parse_results(data: dict, currency: str = "INR") -> list[Offer]:
 class SerpApiShopping:
     name = "serpapi"
 
-    def __init__(self, api_key: str | None = None, language: str = "en", timeout: float = 25.0):
+    def __init__(self, api_key: str | None = None, country: str = "in", language: str = "en", timeout: float = 25.0):
         self.api_key = (api_key or os.environ.get("SERPAPI_KEY", "")).strip().strip("'\"")  # tolerate pasted spaces/quotes
+        self.country = country
         self.language = language
         self.timeout = timeout
 
-    def search(self, query: str, country: str = "in") -> list[Offer]:
-        country = clean_country(country)
+    def search(self, query: str) -> list[Offer]:
         if not self.api_key:
             raise SearchError("Search is not configured: add a SERPAPI_KEY secret to this Space.")
-        params = {"engine": "google_shopping", "q": query, "gl": country, "hl": self.language,
+        params = {"engine": "google_shopping", "q": query, "gl": self.country, "hl": self.language,
                   "api_key": self.api_key}
         req = urllib.request.Request(f"{URL}?{urllib.parse.urlencode(params)}", headers={"User-Agent": "pricewatch/0.4"})
         try:
@@ -77,4 +77,4 @@ class SerpApiShopping:
             raise SearchError("Could not reach the search API. Try again in a moment.") from None
         if data.get("error") and not _results(data):
             raise SearchError(f"Search returned no results: {data['error']}")
-        return parse_results(data, currency=currency_for(country))
+        return parse_results(data, currency="INR" if self.country == "in" else "USD")
