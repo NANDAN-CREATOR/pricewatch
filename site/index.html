@@ -214,7 +214,7 @@ function render(d) {
   const s = d.summary;
   if (s) cur = s.currency || cur;
   const cname = $("country").selectedOptions[0].textContent.replace(/^\S+\s/, "");
-  h += '<div class="meta"><h2>Results for “' + esc(d.query) + '”</h2><span class="when">' + esc(cname) + ' prices · checked ' + esc(when(d.checked_at)) + ' · prices change daily</span></div>';
+  h += '<div class="meta"><h2>Results for “' + esc(d.query) + '”</h2><span class="when">Prices checked ' + esc(when(d.checked_at)) + ' · prices change daily</span></div>';
   const left = d.rejected && d.rejected.length ? '<details><summary>' + d.rejected.length + ' listings were left out (wrong model, wrong gender, used, or different picture)</summary><ul>' +
     d.rejected.slice(0, 40).map(x => '<li>' + esc(x.store) + ': ' + esc(x.title) + ' — ' + esc(x.reason) + '</li>').join("") + '</ul></details>' : "";
   if (!s) { out.innerHTML = h + '<div class="msg">No matching listings. ' + d.listings_found + ' listings were found but none could be confirmed as this product. Try the full model name, for example the brand and model number.</div>' + left; return; }
