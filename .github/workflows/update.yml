@@ -1,6 +1,9 @@
 name: Update prices and deploy site
 
 on:
+  push:
+    branches: [main]
+    paths: ["site/**"]
   schedule:
     - cron: "17 */6 * * *"   # every 6 hours
   workflow_dispatch:
