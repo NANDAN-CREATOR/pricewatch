@@ -14,7 +14,9 @@ from datetime import datetime, timezone
 import gradio as gr
 
 from pricewatch.finder import Request, find
-from pricewatch.inbox import GitHubInbox, make_record
+import hmac
+
+from pricewatch.inbox import GitHubInbox, make_command, make_record, send_command
 from pricewatch.search import FirstAccepted, SearchError
 from pricewatch.search.searchapi import SearchApiShopping
 from pricewatch.search.serpapi import SerpApiShopping
@@ -158,6 +160,23 @@ def api_find(query, photo, kind, gender, min_similarity):
         return {"ok": False, "error": str(exc)}
 
 
+def api_track(name, kind, gender, action, key):
+    """Start or stop daily tracking of a product. Needs the owner's passcode (Space secret ADMIN_KEY)."""
+    secret = os.environ.get("ADMIN_KEY", "")
+    if not secret or not hmac.compare_digest(str(key or ""), secret):
+        time.sleep(1.5)  # slows down guessing
+        return {"ok": False, "error": "Wrong or missing passcode."}
+    if action not in ("track", "untrack") or not (name or "").strip():
+        return {"ok": False, "error": "Nothing to change."}
+    try:
+        cmd = make_command(action, name, {"Men": "men", "Women": "women"}.get(gender),
+                           "clothing" if kind == "Clothing & shoes" else "general")
+        send_command(INBOX, cmd)
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "error": f"Could not save the change: {exc}"}
+    return {"ok": True, "id": cmd["id"], "action": action}
+
+
 with gr.Blocks(title="pricewatch") as demo:
     gr.Markdown("# pricewatch\nType a product name, upload a photo, or both. "
                 "I find the lowest price across stores and show how much each one marks it up.")
@@ -182,6 +201,9 @@ with gr.Blocks(title="pricewatch") as demo:
     query.submit(search, [query, photo, kind, gender, min_sim], [summary, table, filtered])
     _j = gr.JSON(visible=False)
     gr.Button(visible=False).click(api_find, [query, photo, kind, gender, min_sim], _j, api_name="find")
+    _t = gr.JSON(visible=False)
+    _tn, _ta, _tk = gr.Textbox(visible=False), gr.Textbox(visible=False), gr.Textbox(visible=False)
+    gr.Button(visible=False).click(api_track, [_tn, kind, gender, _ta, _tk], _t, api_name="track")
 
 if __name__ == "__main__":
     demo.launch()

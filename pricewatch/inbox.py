@@ -67,8 +67,8 @@ class GitHubInbox:
             self._n += 1
             return True
 
-    def _put(self, rec: dict) -> None:
-        path = f"data/inbox/{rec['ts'].replace(':', '')}-{rec['id'].replace('~', '_')[:60]}.json"
+    def _put(self, rec: dict, prefix: str = "") -> None:
+        path = f"data/inbox/{prefix}{rec['ts'].replace(':', '')}-{rec['id'].replace('~', '_')[:60]}.json"
         body = json.dumps({"message": f"data: search {rec['id'][:40]}", "branch": "main",
                            "content": base64.b64encode(json.dumps(rec, ensure_ascii=False).encode()).decode()}).encode()
         req = urllib.request.Request(f"https://api.github.com/repos/{self.repo}/contents/{path}", data=body, method="PUT",
@@ -90,12 +90,34 @@ class GitHubInbox:
         threading.Thread(target=work, daemon=True).start()
 
 
+def make_command(cmd: str, name: str, gender: str | None, category: str, now: datetime | None = None) -> dict:
+    """A request to start (`track`) or stop (`untrack`) scheduled checks for a product."""
+    if cmd not in ("track", "untrack"):
+        raise ValueError("cmd must be track or untrack")
+    return {"cmd": cmd, "ts": (now or datetime.now(timezone.utc)).isoformat(timespec="seconds"), "name": name.strip(),
+            "gender": gender, "category": category, "id": product_id(name, gender)}
+
+
+def send_command(box: "GitHubInbox", rec: dict) -> None:
+    """Save a command to the repo now (not fire-and-forget): the caller reports failures to the user."""
+    if not box.enabled:
+        raise RuntimeError("Saving to GitHub is not set up on this Space (GH_HISTORY_TOKEN missing).")
+    box._put(rec, prefix="cmd-")
+
+
 def ingest(inbox_dir: Path, history: History, registry: dict, delete: bool = True) -> int:
     """Fold inbox files into history + registry. Returns how many files were used."""
     n = 0
     for f in sorted(Path(inbox_dir).glob("*.json")) if Path(inbox_dir).exists() else []:
         try:
             rec = json.loads(f.read_text(encoding="utf-8"))
+            if rec.get("cmd") in ("track", "untrack"):
+                p = registry.setdefault(rec["id"], {"id": rec["id"], "name": rec["name"], "searches": 0,
+                                                    "category": rec.get("category", "general"), "gender": rec.get("gender")})
+                p["tracked"] = rec["cmd"] == "track"
+                if delete:
+                    f.unlink()
+                continue
             offers = [Offer(store=s["store"], title=rec["name"], price=float(s["price"]), url=s.get("url", ""))
                       for s in rec["stores"]]
             ts = datetime.fromisoformat(rec["ts"])

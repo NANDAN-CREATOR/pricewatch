@@ -110,10 +110,10 @@ def run(tracked: list[dict], provider: SearchProvider, history: History, now: da
 
 
 def pick_to_check(registry: dict, budget: int, now: datetime, fresh_hours: int = 6) -> list[dict]:
-    """Products to re-check this run: skip ones already read recently (a visitor's search counts), then the
-    least recently read first, most-searched first among ties."""
+    """Tracked products to re-check this run (only ones the owner chose to track): skip ones already read
+    recently (a visitor's search counts), then the least recently read first, most-searched first among ties."""
     cutoff = (now - timedelta(hours=fresh_hours)).isoformat(timespec="seconds")
-    due = [p for p in registry.values() if p.get("last_seen", "") < cutoff]
+    due = [p for p in registry.values() if p.get("tracked") and p.get("last_seen", "") < cutoff]
     due.sort(key=lambda p: (p.get("last_seen", ""), -p.get("searches", 0)))
     return due[:budget]
 
@@ -128,7 +128,7 @@ def main(argv: list[str] | None = None) -> int:
 
     root = Path(".")
     now = datetime.now(timezone.utc)
-    budget = int(os.environ.get("TRACK_BUDGET", "8"))
+    budget = int(os.environ.get("TRACK_MAX", "10"))   # most products checked per run = most tracked
     history = History(root / "data" / "trends.jsonl")
     reg_path = root / "data" / "products.json"
     registry: dict = json.loads(reg_path.read_text(encoding="utf-8")) if reg_path.exists() else {}
@@ -136,7 +136,7 @@ def main(argv: list[str] | None = None) -> int:
     for p in json.loads((root / "tracked.json").read_text(encoding="utf-8"))["products"]:  # always-tracked seeds
         pid = product_id(p["name"], p.get("gender"))
         registry.setdefault(pid, {"id": pid, "name": p["name"], "category": p.get("category", "general"),
-                                  "gender": p.get("gender"), "searches": 0})
+                                  "gender": p.get("gender"), "searches": 0, "tracked": True})
     used = ingest(root / "data" / "inbox", history, registry)
     print(f"Folded {used} visitor searches into the history.")
 
@@ -163,10 +163,13 @@ def main(argv: list[str] | None = None) -> int:
     reg_path.parent.mkdir(parents=True, exist_ok=True)
     reg_path.write_text(json.dumps(registry, ensure_ascii=False, indent=1), encoding="utf-8")
 
-    shown = sorted(registry.values(), key=lambda p: -p.get("searches", 0))[:300]
+    shown = sorted(registry.values(), key=lambda p: (not p.get("tracked"), -p.get("searches", 0)))[:300]
     full = run([], None, history, now=now, previous=previous, show=shown)
+    full["max_tracked"] = budget
     for t in full["products"]:
-        t["error"] = registry[t["id"]].get("error") or t.get("error")
+        r = registry[t["id"]]
+        t.update(tracked=bool(r.get("tracked")), gender=r.get("gender"), category=r.get("category", "general"))
+        t["error"] = r.get("error") or t.get("error")
         t["searches"] = registry[t["id"]].get("searches", 0)
         t["points"] = t["points"][-60:]
     out_path.write_text(json.dumps(full, ensure_ascii=False), encoding="utf-8")

@@ -87,6 +87,7 @@ summary{cursor:pointer;font-weight:600}details ul{color:var(--muted);font-size:.
 footer{border-top:1px solid var(--line);background:var(--card);color:var(--muted);font-size:.85rem;padding:20px 0}
 [hidden]{display:none!important}
 @media(max-width:560px){.opts{gap:12px}.stat b{font-size:1.4rem}}
+.trk{border:1px solid var(--line,#e5e8f0);background:#fff;border-radius:8px;padding:4px 10px;font:inherit;font-size:.85rem;cursor:pointer;color:#4f46e5}.trk:disabled{opacity:.7;cursor:default}.err{color:#be123c;font-size:.85rem;margin-left:8px}
 </style>
 </head>
 <body>
@@ -196,6 +197,23 @@ function card(r, best, s, topMatch) {
 }
 
 // Remember what each search showed (in this browser only) and compare next time.
+async function trackCall(action, name, g, k) {
+  let key = ""; try { key = localStorage.getItem("pw_key") || ""; } catch {}
+  if (!key) { key = (window.prompt("Owner passcode (the ADMIN_KEY secret you set in the Space):") || "").trim(); if (!key) return {ok: false, error: "Cancelled."}; }
+  client ||= await Client.connect(SPACE);
+  const r = (await client.predict("/track", [name, k, g, action, key])).data[0];
+  try { r.ok ? localStorage.setItem("pw_key", key) : /passcode/i.test(r.error || "") && localStorage.removeItem("pw_key"); } catch {}
+  return r;
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest(".trk"); if (!b) return;
+  b.disabled = true; const old = b.textContent; b.textContent = "Saving…";
+  try {
+    const r = await trackCall("track", b.dataset.name, b.dataset.gender, b.dataset.kind);
+    b.textContent = r.ok ? "Requested ✓ starts at the next daily run" : old; if (!r.ok) { b.disabled = false; b.nextElementSibling.textContent = r.error; }
+  } catch (err) { b.textContent = old; b.disabled = false; b.nextElementSibling.textContent = "Could not reach the service."; }
+});
+
 function seenBefore(d, s) {
   const key = d.query.toLowerCase().replace(/\s+/g, " ").trim(); let all = {}, note = "";
   try { all = JSON.parse(localStorage.getItem("pw_seen") || "{}"); } catch {}

@@ -2,7 +2,7 @@ name: Track prices over time
 
 on:
   schedule:
-    - cron: "23 3 */2 * *"   # every other day, 03:23 UTC
+    - cron: "23 3 * * *"      # every day, 03:23 UTC (08:53 IST)
   workflow_dispatch:
 
 permissions:
@@ -26,7 +26,7 @@ jobs:
       - name: Check tracked products
         env:
           SEARCHAPI_KEY: ${{ secrets.SEARCHAPI_KEY }}
-          TRACK_BUDGET: "8"
+          TRACK_MAX: "10"
         run: python -m pricewatch.tracker
       - name: Commit history
         run: |

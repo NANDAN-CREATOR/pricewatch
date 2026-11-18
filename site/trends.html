@@ -41,6 +41,7 @@ th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}th{co
 footer{border-top:1px solid var(--line);background:var(--card);color:var(--muted);font-size:.85rem;padding:20px 0}
 input#q{width:100%;padding:13px 16px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff;margin-bottom:6px}
 button#more{display:block;margin:6px auto 0;padding:10px 20px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit;cursor:pointer}
+.trackrow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:10px}.pill{font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px;background:#eef0f6;color:#475569}.pill.on{background:#e0e7ff;color:#3730a3}.tk{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;font:inherit;font-size:.85rem;cursor:pointer;color:var(--brand)}.tk:disabled{opacity:.7;cursor:default}
 </style>
 </head>
 <body>
@@ -49,13 +50,15 @@ button#more{display:block;margin:6px auto 0;padding:10px 20px;border:1px solid v
   <nav><a href="./">Search</a><a class="on" href="trends.html">Price trends</a></nav>
 </div></header>
 <section class="hero"><div class="wrap"><h1>Price trends</h1>
-<p>A search tool shows today's prices. Here the same products are re-checked every other day, so you can see whether a price is actually low, and which stores just dropped.</p></div></section>
+<p>A search tool shows today's prices. Here the same products are re-checked every day, so you can see whether a price is actually low, and which stores just dropped.</p></div></section>
 <main><div class="wrap">
 <input id="q" type="search" placeholder="Search tracked products, e.g. boat airdopes" aria-label="Search tracked products">
 <div id="count" class="note"></div><div id="out"><div class="msg">Loading…</div></div>
 <button id="more" type="button" hidden>Show more</button></div></main>
-<footer><div class="wrap">Every product searched on this site is saved and re-checked every other day (most-searched first). History builds up over time: a buy-or-wait signal needs at least 3 checks. Always confirm the price at the store.</div></footer>
-<script>
+<footer><div class="wrap">Every product searched on this site is saved and re-checked every day (most-searched first). History builds up over time: a buy-or-wait signal needs at least 3 checks. Always confirm the price at the store.</div></footer>
+<script type="module">
+const SPACE = "Aman519/pricewatch";
+let client;
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const inr = n => "₹" + Math.round(n).toLocaleString("en-IN");
@@ -75,7 +78,11 @@ function spark(points) {
 function card(p) {
   const v = p.verdict || {code: "building", text: ""};
   const label = {low: "Good time to buy", high: "Consider waiting", fair: "Fair price", building: "Building history"}[v.code];
-  let h = '<section class="card"><div class="head"><div><h2>' + esc(p.name) + '</h2><p class="vtext">' + esc(v.text) + '</p></div><span class="badge ' + esc(v.code) + '">' + label + '</span></div>';
+  const kindL = p.category === "clothing" ? "Clothing & shoes" : "Anything", genL = p.gender === "men" ? "Men" : p.gender === "women" ? "Women" : "Any";
+  const attrs = ' data-name="' + esc(p.name) + '" data-kind="' + kindL + '" data-gender="' + genL + '"';
+  let h = '<section class="card"><div class="head"><div><h2>' + esc(p.name) + '</h2><p class="vtext">' + esc(v.text) + '</p></div><span class="badge ' + esc(v.code) + '">' + label + '</span></div>' +
+    '<div class="trackrow">' + (p.tracked ? '<span class="pill on">Tracked daily</span><button type="button" class="tk" data-act="untrack"' + attrs + '>Stop tracking</button>'
+      : '<span class="pill">History from searches only</span><button type="button" class="tk" data-act="track"' + attrs + '>Track daily</button>') + '<span class="err"></span></div>';
   if (p.checks) h += '<div class="nums"><div><small>Lowest now</small><b>' + inr(p.latest_lowest) + '</b></div><div><small>Median now</small><b>' + inr(p.latest_median) + '</b></div><div><small>Lowest ever seen</small><b>' + inr(p.period_low) + '</b></div><div><small>Highest low</small><b>' + inr(p.period_high) + '</b></div><div><small>Checks</small><b>' + p.checks + '</b></div></div>' +
     '<div class="note">Last checked ' + esc(day(p.latest_date)) + '</div>' + spark(p.points);
   else h += '<div class="note">No price recorded yet.</div>';
@@ -88,22 +95,40 @@ function card(p) {
   return h + '</section>';
 }
 
-let ALL = [], shown = 20;
+let ALL = [], shown = 20, MAX = 10;
 function draw() {
   const toks = $("q").value.toLowerCase().split(/\s+/).filter(Boolean);
   const list = ALL.filter(p => toks.every(t => p.name.toLowerCase().includes(t)));
-  $("count").textContent = ALL.length ? list.length + " of " + ALL.length + " products with price history" : "";
+  $("count").textContent = ALL.length ? list.length + " of " + ALL.length + " products with price history · " + ALL.filter(p => p.tracked).length + " tracked daily (max " + (MAX || 10) + ")" : "";
   $("out").innerHTML = list.length ? list.slice(0, shown).map(card).join("") :
     '<div class="msg">' + (ALL.length ? "No tracked product matches. Search it on the main page and it will start building a history." : "No tracked products yet.") + "</div>";
   $("more").hidden = list.length <= shown;
 }
+async function trackCall(act, name, kind, g) {
+  let key = ""; try { key = localStorage.getItem("pw_key") || ""; } catch {}
+  if (!key) { key = (window.prompt("Owner passcode (the ADMIN_KEY secret you set in the Space):") || "").trim(); if (!key) return {ok: false, error: "Cancelled."}; }
+  if (!client) { const { Client } = await import("https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js"); client = await Client.connect(SPACE); }
+  const r = (await client.predict("/track", [name, kind, g, act, key])).data[0];
+  try { r.ok ? localStorage.setItem("pw_key", key) : /passcode/i.test(r.error || "") && localStorage.removeItem("pw_key"); } catch {}
+  return r;
+}
+$("out").addEventListener("click", async e => {
+  const b = e.target.closest(".tk"); if (!b) return;
+  const msg = b.parentElement.querySelector(".err"), old = b.textContent; b.disabled = true; b.textContent = "Saving…"; msg.textContent = "";
+  try {
+    const r = await trackCall(b.dataset.act, b.dataset.name, b.dataset.kind, b.dataset.gender);
+    if (r.ok) b.textContent = (b.dataset.act === "track" ? "Requested ✓" : "Stop requested ✓") + " applies at the next daily run (08:53 IST)";
+    else { b.textContent = old; b.disabled = false; msg.textContent = r.error; }
+  } catch { b.textContent = old; b.disabled = false; msg.textContent = "Could not reach the service."; }
+});
 $("q").addEventListener("input", () => { shown = 20; draw(); });
 $("more").addEventListener("click", () => { shown += 20; draw(); });
 fetch("trends.json?x=" + Date.now()).then(r => { if (!r.ok) throw 0; return r.json(); }).then(d => {
-  ALL = (d.products || []).sort((a, b) => (b.checks || 0) - (a.checks || 0) || (b.searches || 0) - (a.searches || 0));
+  MAX = d.max_tracked || 10;
+  ALL = (d.products || []).sort((a, b) => (b.tracked ? 1 : 0) - (a.tracked ? 1 : 0) || (b.checks || 0) - (a.checks || 0) || (b.searches || 0) - (a.searches || 0));
   $("q").value = new URLSearchParams(location.search).get("q") || "";
   draw();
-}).catch(() => { $("out").innerHTML = '<div class="msg"><b>No history yet.</b> Every product searched on the main page is saved, and the first checks appear here after the next scheduled run (every other day). Charts and buy-or-wait signals appear as the history grows.</div>'; });
+}).catch(() => { $("out").innerHTML = '<div class="msg"><b>No history yet.</b> Every product searched on the main page is saved, and the first checks appear here after the next scheduled run (daily). Charts and buy-or-wait signals appear as the history grows.</div>'; });
 </script>
 </body>
 </html>

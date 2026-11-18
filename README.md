@@ -126,9 +126,10 @@ Pushes to `main` sync the app to the Space via `.github/workflows/sync-to-hf.yml
 
 ## Price trends (what Google Shopping does not give you)
 
-Every search on the site is saved to `data/inbox/` by the Space (needs the `GH_HISTORY_TOKEN` Space secret: a fine-grained GitHub token with Contents read/write on this repo). The tracker folds those into the history, keeps `data/products.json`, and re-checks the most-searched products within `TRACK_BUDGET` searches per run. `tracked.json` lists always-tracked products that are re-checked every other day by `.github/workflows/track.yml`. Each check
-records every store's price in `data/trends.jsonl`; `site/trends.html` then shows, per product, a chart of the
-lowest and median price over time, which stores dropped since the last check, and a buy-or-wait signal (needs
-3+ checks). It needs one GitHub Actions secret, `SEARCHAPI_KEY`. Each check costs one search per product, so keep
-the list short. The site also remembers, in your browser only, what a search showed last time and tells you how the
-lowest price moved since.
+Prices are tracked only for products **you choose**, so you decide how much search quota to use.
+
+- Every search on the site is saved for free (by the Space, to `data/inbox/`), so a product you searched has history from the days you looked at it. This needs the `GH_HISTORY_TOKEN` Space secret (fine-grained GitHub token, Contents read/write on this repo).
+- Press **Track daily** on a search result or on the Price trends page, and `.github/workflows/track.yml` re-checks that product every day (08:53 IST). Press **Stop tracking** to stop spending searches on it; its history stays. The first time you press either, the page asks for your owner passcode (the `ADMIN_KEY` Space secret), so only you can change the list. Changes apply at the next daily run.
+- At most `TRACK_MAX` products (default 10) are checked per run, one search each. Needs the `SEARCHAPI_KEY` Actions secret.
+- `site/trends.html` shows, per product, the lowest and median price over time, each store's change since the last check, and a buy-or-wait signal (needs 3 days with a reading).
+- `tracked.json` only seeds the first tracked products; after that the list lives in `data/products.json`.

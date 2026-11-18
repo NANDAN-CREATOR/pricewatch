@@ -32,7 +32,8 @@
     "price": 1343.0,
     "url": "https://www.google.com/search?ibp=oshop&q=Levi%27s+511+slim+fit+jeans&prds=catalogid:3945319291710944636,gpcid:12871287414093488331,headlineOfferDocid:17803244449122887905,imageDocid:8791412451364351935,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    }
-  ]
+  ],
+  "tracked": true
  },
  "headphones-sony-wh1000xm5": {
   "id": "headphones-sony-wh1000xm5",
@@ -98,7 +99,8 @@
     "price": 34990.0,
     "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5+headphones&prds=headlineOfferDocid:15022832936128867608,imageDocid:1361636408093930044,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
    }
-  ]
+  ],
+  "tracked": true
  },
  "evara-kurti-short-sleeveless-veda~women": {
   "id": "evara-kurti-short-sleeveless-veda~women",
@@ -138,7 +140,8 @@
     "price": 999.0,
     "url": "https://www.google.com/search?ibp=oshop&q=Evara+Veda+short+sleeveless+kurti&prds=catalogid:7545707224976587003,gpcid:17777582389817353061,headlineOfferDocid:13130537353940340647,imageDocid:5282381952988697534,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    }
-  ]
+  ],
+  "tracked": true
  },
  "141-airdopes-boat": {
   "id": "141-airdopes-boat",
@@ -158,6 +161,7 @@
     "price": 1499.0,
     "url": "https://www.google.com/search?ibp=oshop&q=boat+airdopes+141&prds=catalogid:13598667339654357819,gpcid:1300524154047100935,headlineOfferDocid:9895337915339249045,imageDocid:17617802304963346491,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    }
-  ]
+  ],
+  "tracked": false
  }
 }
