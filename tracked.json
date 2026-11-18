@@ -2,7 +2,7 @@
   "note": "Products whose prices are checked on a schedule (every other day) to build a price history. Each check uses one search from your search-API quota, so keep this list short. Edit and push to change it.",
   "products": [
     {"id": "levis-511-men", "name": "Levi's 511 slim fit jeans", "category": "clothing", "gender": "men"},
-    {"id": "sony-wh-1000xm5", "name": "Sony WH-1000XM5", "category": "general", "gender": null},
+    {"id": "sony-wh-1000xm5", "name": "Sony WH-1000XM5 headphones", "category": "general", "gender": null},
     {"id": "evara-veda-kurti", "name": "Evara Veda short sleeveless kurti", "category": "clothing", "gender": "women"}
   ]
 }

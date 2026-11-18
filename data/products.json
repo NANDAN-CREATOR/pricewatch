@@ -139,31 +139,5 @@
     "url": "https://www.google.com/search?ibp=oshop&q=Evara+Veda+short+sleeveless+kurti&prds=catalogid:7545707224976587003,gpcid:17777582389817353061,headlineOfferDocid:13130537353940340647,imageDocid:5282381952988697534,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    }
   ]
- },
- "sony-wh1000xm5": {
-  "id": "sony-wh1000xm5",
-  "name": "Sony WH-1000XM5",
-  "category": "general",
-  "gender": null,
-  "searches": 0,
-  "error": null,
-  "last_seen": "2026-11-18T18:57:27+00:00",
-  "stores": [
-   {
-    "store": "Slickwraps",
-    "price": 2241.92,
-    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5&prds=catalogid:4532271275495878925,gpcid:1713985911983955903,headlineOfferDocid:1834205457246992808,imageDocid:9007901035066927100,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "Desertcart.ae",
-    "price": 3433.38,
-    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5&prds=catalogid:6784950865097077046,gpcid:2083134165338950134,headlineOfferDocid:11970819813037606981,imageDocid:13460651678974041862,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "amazon.in",
-    "price": 5276.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=Sony+WH-1000XM5&prds=catalogid:6784950865097077046,gpcid:2083134165338950134,headlineOfferDocid:13785914599359256810,imageDocid:13460651678974041862,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   }
-  ]
  }
 }
