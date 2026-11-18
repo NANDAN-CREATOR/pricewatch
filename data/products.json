@@ -139,5 +139,25 @@
     "url": "https://www.google.com/search?ibp=oshop&q=Evara+Veda+short+sleeveless+kurti&prds=catalogid:7545707224976587003,gpcid:17777582389817353061,headlineOfferDocid:13130537353940340647,imageDocid:5282381952988697534,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    }
   ]
+ },
+ "141-airdopes-boat": {
+  "id": "141-airdopes-boat",
+  "name": "boat airdopes 141",
+  "category": "general",
+  "gender": null,
+  "searches": 1,
+  "last_seen": "2026-11-18T19:09:55+00:00",
+  "stores": [
+   {
+    "store": "EMI Snapmint",
+    "price": 1099.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=boat+airdopes+141&prds=catalogid:16176077765910931842,gpcid:1417175416142197392,headlineOfferDocid:12748405880805693934,imageDocid:4705702054926152727,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "LowestRate Shopping",
+    "price": 1499.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=boat+airdopes+141&prds=catalogid:13598667339654357819,gpcid:1300524154047100935,headlineOfferDocid:9895337915339249045,imageDocid:17617802304963346491,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   }
+  ]
  }
 }
