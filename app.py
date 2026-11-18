@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 
 import gradio as gr
 
-from pricewatch.finder import PHOTO_MIN_SIMILARITY, Request, find
+from pricewatch.finder import Request, find
 from pricewatch.search import FirstAccepted, SearchError
 from pricewatch.search.searchapi import SearchApiShopping
 from pricewatch.search.serpapi import SerpApiShopping
@@ -163,8 +163,8 @@ with gr.Blocks(title="pricewatch") as demo:
             with gr.Row():
                 kind = gr.Radio(["Anything", "Clothing & shoes"], value="Anything", label="Type")
                 gender = gr.Radio(["Any", "Men", "Women"], value="Any", label="Gender (clothing)")
-            min_sim = gr.Slider(0.5, 0.95, value=PHOTO_MIN_SIMILARITY, step=0.01,
-                                label="Photo match strictness (higher = only very similar items)")
+            min_sim = gr.Slider(0, 0.95, value=0, step=0.01,
+                                label="Photo match cut-off (0 = automatic: best match and close ones)")
             go = gr.Button("Find prices", variant="primary")
         with gr.Column():
             summary = gr.Markdown()

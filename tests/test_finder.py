@@ -164,7 +164,8 @@ def test_describe_photo_picks_the_closest_labels():
             both = self.embed_texts(["a photo of a sneakers", "a photo of a blue sneakers"]).sum(axis=0)
             return (both / np.linalg.norm(both))[None, :]
     info = describe_photo(Image.new("RGB", (8, 8)), Oracle(), gender="women")
-    assert (info["category"], info["color"], info["query"]) == ("sneakers", "blue", "women blue sneakers")
+    assert (info["category"], info["color"]) == ("sneakers", "blue")
+    assert info["query"].startswith("women blue") and info["query"].endswith("sneakers") and len(info["alternatives"]) == 2
 
 
 def test_errors_and_missing_input():
@@ -217,3 +218,15 @@ def test_result_carries_check_time_and_row_details():
     stamped = find(Request(query="levis 511 slim fit jeans"), FakeProvider([]), None,
                    offers_cache=lambda q: (list(JEANS), "2026-11-18T10:00:00+00:00"))
     assert stamped["checked_at"] == "2026-11-18T10:00:00+00:00"
+
+
+def test_photo_search_ranks_by_look_and_keeps_best_match_per_store(monkeypatch):
+    # Store A has two listings: a cheap one that looks different and a dearer one that matches the photo.
+    offers = [offer("A", "Levis 511 Jeans cheap tee-look", 1000, img="tee"), offer("A", "Levis 511 Jeans", 2600),
+              offer("B", "Levis 511 Jeans", 2500), offer("C", "Levis 511 Jeans", 1200, img="tee")]
+    photo = Image.open(__import__("io").BytesIO(make_image("jeans", fmt="PNG")))
+    out = find(Request(query="levis 511 jeans", photo=photo), FakeProvider(offers), FakeEmbedder())  # automatic cut-off
+    rows = {r["store"]: r for r in out["summary"]["stores"]}
+    assert set(rows) == {"A", "B"} and rows["A"]["price"] == 2600  # best visual match per store, not the cheapest
+    assert out["photo_used"] is True and rows["A"]["similarity"] > 0.9
+    assert any(x["store"] == "C" and "looks different" in x["reason"] for x in out["rejected"])

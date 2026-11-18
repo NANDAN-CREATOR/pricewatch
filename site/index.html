@@ -170,15 +170,16 @@ $("go").onclick = async () => {
   out.innerHTML = '<div class="stats">' + '<div class="sk" style="height:96px"></div>'.repeat(4) + '</div><div class="grid">' + '<div class="sk"></div>'.repeat(4) + '</div>';
   try {
     client ||= await Client.connect(SPACE);
-    const res = await client.predict("/find", [q, file ? handle_file(file) : null, kind, gender, 0.75]);
+    const res = await client.predict("/find", [q, file ? handle_file(file) : null, kind, gender, 0]);
     render(res.data[0]);
   } catch (e) { out.innerHTML = '<div class="msg err">Could not reach the search service. ' + esc(e.message || e) + '</div>'; }
   $("go").disabled = false; $("go").textContent = "Find prices";
 };
 
-function card(r, best, s) {
+function card(r, best, s, topMatch) {
   const img = /^(https?:|data:image)/.test(r.image_url || "") ? '<img loading="lazy" referrerpolicy="no-referrer" alt="' + esc(r.title) + '" src="' + esc(r.image_url) + '" onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{className:\'ph\',textContent:\'No image\'}))">' : '<span class="ph">No image</span>';
   const chips = [];
+  if (r.similarity != null && s.photo_used) chips.push('<span class="chip disc">Photo match ' + Math.round(r.similarity * 100) + '%</span>');
   if (best) chips.push('<span class="chip ok">Cheapest</span>');
   else if (r.markup_vs_lowest_pct != null) chips.push('<span class="chip up">' + pct(r.markup_vs_lowest_pct) + ' vs lowest</span>');
   if (r.markup_vs_median_pct != null && !best) chips.push('<span class="chip">' + pct(r.markup_vs_median_pct) + ' vs median</span>');
@@ -186,7 +187,7 @@ function card(r, best, s) {
   if (r.mrp_inflation_pct != null) chips.push('<span class="chip up">MRP ' + pct(r.mrp_inflation_pct) + ' above market</span>');
   const link = /^https?:/.test(r.url || "") ? '<a class="visit" href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">View at ' + esc(r.store) + '</a>' : "";
   return '<article class="item' + (best ? " best" : "") + '"><div class="pic">' + img +
-    (best ? '<span class="tag">LOWEST PRICE</span>' : "") + (r.looks_same === false ? '<span class="tag warn">Looks different</span>' : "") + '</div>' +
+    (best ? '<span class="tag">LOWEST PRICE</span>' : topMatch ? '<span class="tag" style="background:var(--brand)">BEST MATCH</span>' : "") + (r.looks_same === false ? '<span class="tag warn">Looks different</span>' : "") + '</div>' +
     '<div class="body"><div class="store">' + esc(r.store) + '</div><div class="ttl">' + esc(r.title) + '</div>' +
     '<div class="price">' + inr(r.price) + '</div>' +
     (r.mrp ? '<div class="mrp"><s>' + inr(r.mrp) + '</s>MRP</div>' : "") +
@@ -198,7 +199,8 @@ function render(d) {
   const out = $("out");
   if (!d.ok) { out.innerHTML = '<div class="msg err">' + esc(d.error) + '</div>'; return; }
   let h = "";
-  if (d.photo_info) h += '<div class="guess">' + (file ? '<img src="' + esc($("prev").src) + '" alt="">' : "") + '<div>We read your photo as <b>' + esc(d.photo_info.color + " " + d.photo_info.category) + '</b>. Add the brand and model in the name box for a sharper result.</div></div>';
+  if (d.photo_info) h += '<div class="guess">' + (file ? '<img src="' + esc($("prev").src) + '" alt="">' : "") + '<div>We read your photo as <b>' + esc(d.query) + '</b>' + (d.photo_info.alternatives && d.photo_info.alternatives.length ? ' (it could also be: ' + esc(d.photo_info.alternatives.join(", ")) + ')' : '') + '. The phrase is now in the name box: edit it (add the brand or the exact kind of item) and search again for a closer match.</div></div>';
+  if (!$("q").value.trim()) $("q").value = d.query;
   (d.notes || []).forEach(n => h += '<div class="msg" style="margin-bottom:12px">' + esc(n) + '</div>');
   const s = d.summary;
   h += '<div class="meta"><h2>Results for “' + esc(d.query) + '”</h2><span class="when">Prices checked ' + esc(when(d.checked_at)) + ' · prices change daily</span></div>';
@@ -211,7 +213,9 @@ function render(d) {
     '<div class="stat"><small>Median</small><b>' + inr(s.median) + '</b><span>typical price</span></div>' +
     '<div class="stat"><small>Average</small><b>' + inr(s.average) + '</b><span>across stores</span></div>' +
     '<div class="stat"><small>Stores compared</small><b>' + s.store_count + '</b><span>' + (rows.length && s.stores[rows.length - 1].markup_vs_lowest_pct != null ? "highest is " + pct(s.stores[rows.length - 1].markup_vs_lowest_pct) + " above lowest" : "") + '</span></div></div>';
-  h += '<div class="grid">' + rows.map((r, i) => card(r, i === 0, d)).join("") + '</div>';
+  if (d.photo_used) rows.sort((a, b) => (b.similarity ?? 0) - (a.similarity ?? 0));  // closest to your photo first
+  const lowest = r => r.store === s.lowest.store && r.price === s.lowest.price;
+  h += '<div class="grid">' + rows.map((r, i) => card(r, lowest(r), d, d.photo_used && i === 0)).join("") + '</div>';
   h += left;
   out.innerHTML = h;
 }
