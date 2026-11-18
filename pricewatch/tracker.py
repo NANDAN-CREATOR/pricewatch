@@ -152,6 +152,7 @@ def main(argv: list[str] | None = None) -> int:
         doc = run(check, provider, history, now=now, limit=len(check), previous=previous)
         errors = [p for p in doc["products"] if p.get("error")]
         for p in doc["products"]:
+            registry[p["id"]]["error"] = p.get("error")
             if not p.get("error"):
                 registry[p["id"]]["last_seen"] = now.isoformat(timespec="seconds")
                 registry[p["id"]]["stores"] = [{k: s.get(k) for k in ("store", "price", "url")} for s in p["stores"]]
@@ -165,6 +166,7 @@ def main(argv: list[str] | None = None) -> int:
     shown = sorted(registry.values(), key=lambda p: -p.get("searches", 0))[:300]
     full = run([], None, history, now=now, previous=previous, show=shown)
     for t in full["products"]:
+        t["error"] = registry[t["id"]].get("error") or t.get("error")
         t["searches"] = registry[t["id"]].get("searches", 0)
         t["points"] = t["points"][-60:]
     out_path.write_text(json.dumps(full, ensure_ascii=False), encoding="utf-8")
