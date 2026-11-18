@@ -1,138 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>pricewatch · lowest price & markup across stores</title>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pricewatch</title>
 <style>
-  :root { --bg:#fafaf8; --fg:#1c1c1a; --muted:#6b6b66; --card:#fff; --line:#e4e3de; --good:#1a7f4b; --warn:#b45309; --bad:#b42318; --accent:#2457d6; }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg:#161615; --fg:#ecece8; --muted:#9a9a93; --card:#1f1f1d; --line:#33332f; --good:#4cc38a; --warn:#f0a33e; --bad:#ff7a6b; --accent:#7aa2ff; }
-  }
-  * { box-sizing: border-box; }
-  body { margin:0; font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--fg); }
-  main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
-  h1 { font-size: 22px; margin: 0 0 4px; }
-  .sub { color: var(--muted); margin: 0 0 20px; }
-  input[type=search] { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:var(--card); color:var(--fg); font:inherit; margin-bottom:20px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px; }
-  .head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:baseline; }
-  .name { font-size:17px; font-weight:600; }
-  .big { font-size:24px; font-weight:700; color:var(--good); }
-  .kpis { display:flex; gap:24px; flex-wrap:wrap; margin:10px 0 14px; color:var(--muted); font-size:13px; }
-  .kpis b { display:block; color:var(--fg); font-size:16px; }
-  table { width:100%; border-collapse:collapse; font-size:14px; }
-  th { text-align:left; color:var(--muted); font-weight:500; font-size:12px; padding:6px 4px; border-bottom:1px solid var(--line); }
-  td { padding:8px 4px; border-bottom:1px solid var(--line); vertical-align:middle; }
-  tr:last-child td { border-bottom:none; }
-  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
-  .bar { height:6px; border-radius:3px; background:var(--line); overflow:hidden; min-width:60px; }
-  .bar > i { display:block; height:100%; background:var(--warn); }
-  .tag { font-size:11px; padding:1px 6px; border-radius:999px; border:1px solid var(--line); color:var(--muted); }
-  .good { color:var(--good); } .warn { color:var(--warn); } .bad { color:var(--bad); }
-  a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; }
-  details { margin-top:10px; color:var(--muted); font-size:13px; }
-  .note { color:var(--muted); font-size:12px; margin-top:24px; }
-  svg.spark { width:100%; height:40px; margin-top:8px; }
-</style>
-</head>
-<body>
-<main>
-  <h1>pricewatch</h1>
-  <p class="sub" id="stamp">Loading…</p>
-  <input type="search" id="q" placeholder="Filter products…" autocomplete="off">
-  <div id="list"></div>
-  <p class="note">
-    <b>Markup vs lowest</b> = how much more a store charges than the cheapest store.
-    <b>MRP inflation</b> = how far the store's struck-through "original price" sits above the product's real going price
-    (median selling price over the last 90 days; until history builds up, today's median). Prices are informational; verify on the store before buying.
-  </p>
-</main>
-<script>
-const fmt = (n, cur) => new Intl.NumberFormat("en-IN", {style:"currency", currency: cur || "INR", maximumFractionDigits: 0}).format(n);
-const pctText = v => v == null ? "–" : (v > 0 ? "+" : "") + v.toFixed(1) + "%";
-const el = (tag, props = {}, ...kids) => {
-  const e = document.createElement(tag);
-  for (const [k, v] of Object.entries(props)) { if (k === "class") e.className = v; else e[k] = v; }
-  for (const k of kids) e.append(k);
-  return e;
+body{font:16px system-ui,sans-serif;max-width:960px;margin:2rem auto;padding:0 1rem;color:#1a1a1a}
+input,select,button{font:inherit;padding:.5rem .7rem;border:1px solid #bbb;border-radius:8px}
+button{background:#1a56db;color:#fff;border-color:#1a56db;cursor:pointer}button:disabled{opacity:.6}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0}#q{flex:1;min-width:220px}
+table{border-collapse:collapse;width:100%;margin-top:1rem}th,td{padding:.45rem .6rem;border-bottom:1px solid #e3e3e3;text-align:left}
+th{background:#f5f5f5}.big{font-size:1.5rem;font-weight:700}.muted{color:#666;font-size:.9rem}.err{color:#b00020}
+.no{color:#b00020}.yes{color:#0a7a2f}img{max-height:120px;border-radius:8px}
+</style></head><body>
+<h1>pricewatch</h1>
+<p class="muted">Type a product name, upload a photo, or both. <a href="watchlist.html">Tracked watchlist</a></p>
+<div class="row"><input id="q" placeholder="e.g. Levi's 511 slim fit jeans">
+<select id="kind"><option>Anything</option><option>Clothing &amp; shoes</option></select>
+<select id="gender"><option>Any</option><option>Men</option><option>Women</option></select></div>
+<div class="row"><input type="file" id="photo" accept="image/*"><img id="prev" hidden alt="">
+<button id="go">Find prices</button></div>
+<div id="out" aria-live="polite"></div>
+<script type="module">
+import { Client, handle_file } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+const SPACE = "Aman519/pricewatch";
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const inr = n => "₹" + Math.round(n).toLocaleString("en-IN");
+const pct = v => v == null ? "-" : (v >= 0 ? "+" : "") + v.toFixed(1) + "%";
+let client;
+$("photo").onchange = () => { const f = $("photo").files[0]; $("prev").hidden = !f; if (f) $("prev").src = URL.createObjectURL(f); };
+$("q").onkeydown = e => { if (e.key === "Enter") $("go").click(); };
+$("go").onclick = async () => {
+  const q = $("q").value.trim(), f = $("photo").files[0], out = $("out");
+  if (!q && !f) { out.innerHTML = '<p class="err">Type a product name or choose a photo.</p>'; return; }
+  $("go").disabled = true; out.innerHTML = '<p class="muted">Searching stores… the first request can take up to a minute while the Space wakes up.</p>';
+  try {
+    client ||= await Client.connect(SPACE);
+    const res = await client.predict("/find", [q, f ? handle_file(f) : null, $("kind").value, $("gender").value, 0.75]);
+    render(res.data[0]);
+  } catch (e) { out.innerHTML = '<p class="err">Could not reach the search service: ' + esc(e.message || e) + '</p>'; }
+  $("go").disabled = false;
 };
-const inflClass = v => v == null ? "" : v >= 25 ? "bad" : v >= 8 ? "warn" : "good";
-
-function sparkline(points) {
-  if (points.length < 2) return null;
-  const vals = points.map(p => p.lowest), min = Math.min(...vals), max = Math.max(...vals), span = (max - min) || 1;
-  const w = 600, h = 40, step = w / (points.length - 1);
-  const d = points.map((p, i) => `${i ? "L" : "M"}${(i * step).toFixed(1)},${(h - 4 - ((p.lowest - min) / span) * (h - 8)).toFixed(1)}`).join(" ");
-  const ns = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(ns, "svg");
-  svg.setAttribute("viewBox", `0 0 ${w} ${h}`); svg.setAttribute("class", "spark"); svg.setAttribute("preserveAspectRatio", "none");
-  const path = document.createElementNS(ns, "path");
-  path.setAttribute("d", d); path.setAttribute("fill", "none"); path.setAttribute("stroke", "currentColor"); path.setAttribute("stroke-width", "2");
-  svg.append(path);
-  return svg;
-}
-
-function card(p) {
-  const s = p.summary, c = el("div", {class: "card"});
-  c.dataset.name = p.name.toLowerCase();
-  if (!s) {
-    c.append(el("div", {class: "name"}, p.name), el("p", {class: "sub"}, "No offers found this run."));
-    p.errors.forEach(e => c.append(el("div", {class: "tag"}, `${e.source}: ${e.error}`)));
-    return c;
-  }
-  const head = el("div", {class: "head"},
-    el("div", {class: "name"}, p.name, p.category && p.category !== "general" ? el("span", {class: "tag", style: "margin-left:8px"}, p.category) : ""),
-    el("div", {class: "big"}, fmt(s.lowest.price, s.currency)));
-  const kpi = (label, value) => el("div", {}, el("b", {}, value), label);
-  const kpis = el("div", {class: "kpis"},
-    kpi(`lowest · ${s.lowest.store}`, fmt(s.lowest.price, s.currency)),
-    kpi("median", fmt(s.median, s.currency)),
-    kpi("average", fmt(s.average, s.currency)),
-    kpi("stores compared", String(s.store_count)));
-
-  const maxMarkup = Math.max(10, ...s.stores.map(r => r.markup_vs_lowest_pct));
-  const table = el("table");
-  table.append(el("thead", {}, el("tr", {},
-    el("th", {}, "Store"), el("th", {class: "num"}, "Price"), el("th", {}, "Markup vs lowest"),
-    el("th", {class: "num"}, "Claims"), el("th", {class: "num"}, "MRP inflation"))));
-  const tb = el("tbody");
+function render(d) {
+  const out = $("out");
+  if (!d.ok) { out.innerHTML = '<p class="err">' + esc(d.error) + '</p>'; return; }
+  let h = '<p class="muted">Searched for: <b>' + esc(d.query) + '</b>' +
+    (d.photo_info ? ' (guessed from your photo; add brand/model for a sharper result)' : '') + '</p>';
+  (d.notes || []).forEach(n => h += '<p class="muted">' + esc(n) + '</p>');
+  const s = d.summary;
+  if (!s) { out.innerHTML = h + '<p>No matching listings (' + d.listings_found + ' found, all filtered out). Try a more general name.</p>'; return; }
+  h += '<div class="big">Lowest: ' + inr(s.lowest.price) + ' at ' + esc(s.lowest.store) + '</div>' +
+    '<p>Median ' + inr(s.median) + ' · average ' + inr(s.average) + ' · ' + s.store_count + ' stores</p>' +
+    '<table><tr><th>Store</th><th>Price</th><th>vs lowest</th><th>vs median</th><th>Claims</th><th>MRP inflation</th><th>Looks same?</th><th></th></tr>';
   for (const r of s.stores) {
-    const store = r.url ? el("a", {href: r.url, target: "_blank", rel: "noopener noreferrer"}, r.store) : document.createTextNode(r.store);
-    const nameCell = el("td", {}, store);
-    if (!r.in_stock) nameCell.append(" ", el("span", {class: "tag"}, "out of stock"));
-    if (r.image_match === false) nameCell.append(" ", el("span", {class: "tag bad", title: `image differs from the other stores (distance ${r.image_distance}/64): check it is the same product`}, "image differs"));
-    else if (r.image_match === true) nameCell.append(" ", el("span", {class: "tag good", title: `image matches the other stores (distance ${r.image_distance}/64)`}, "image ✓"));
-    const bar = el("div", {class: "bar"}, el("i", {style: `width:${(r.markup_vs_lowest_pct / maxMarkup * 100).toFixed(0)}%`}));
-    tb.append(el("tr", {},
-      nameCell,
-      el("td", {class: "num"}, fmt(r.price, s.currency)),
-      el("td", {}, r.markup_vs_lowest_pct === 0 ? el("span", {class: "good"}, "lowest") :
-        el("div", {}, el("span", {}, pctText(r.markup_vs_lowest_pct)), bar)),
-      el("td", {class: "num"}, r.claimed_discount_pct == null ? "–" : `${r.claimed_discount_pct.toFixed(0)}% off`),
-      el("td", {class: "num " + inflClass(r.mrp_inflation_pct)}, pctText(r.mrp_inflation_pct))));
+    const same = r.looks_same == null ? "-" : r.looks_same ? '<span class="yes">yes</span>' : '<span class="no">no</span>';
+    h += '<tr><td>' + esc(r.store) + '</td><td>' + inr(r.price) + '</td><td>' + pct(r.markup_vs_lowest_pct) + '</td><td>' + pct(r.markup_vs_median_pct) +
+      '</td><td>' + (r.claimed_discount_pct == null ? "-" : r.claimed_discount_pct.toFixed(0) + "% off") + '</td><td>' + pct(r.mrp_inflation_pct) +
+      '</td><td>' + same + '</td><td>' + (/^https?:/.test(r.url || "") ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">open</a>' : "") + '</td></tr>';
   }
-  table.append(tb);
-  c.append(head, kpis, table);
-
-  const sp = sparkline(p.history);
-  if (sp) c.append(el("details", {open: true}, el("summary", {}, "Lowest price history"), sp));
-  if (s.outliers.length) c.append(el("details", {}, el("summary", {}, `${s.outliers.length} listing(s) excluded as price outliers`),
-    ...s.outliers.map(o => el("div", {}, `${o.store}: ${fmt(o.price, s.currency)} · ${o.title}`))));
-  if (p.rejected.length) c.append(el("details", {}, el("summary", {}, `${p.rejected.length} listing(s) rejected as not this product`),
-    ...p.rejected.map(o => el("div", {}, `${o.store}: ${o.title} → ${o.reason}`))));
-  return c;
+  h += '</table><p class="muted">MRP inflation compares each store\'s struck-through price with today\'s median price.</p>';
+  if (d.rejected && d.rejected.length) h += '<details><summary>' + d.rejected.length + ' listings filtered out</summary><ul>' +
+    d.rejected.slice(0, 40).map(x => '<li>' + esc(x.store) + ': ' + esc(x.title) + ' — ' + esc(x.reason) + '</li>').join("") + '</ul></details>';
+  out.innerHTML = h;
 }
-
-fetch("site.json", {cache: "no-store"}).then(r => r.json()).then(data => {
-  document.getElementById("stamp").textContent = "Last updated " + new Date(data.generated_at).toLocaleString();
-  const list = document.getElementById("list");
-  data.products.forEach(p => list.append(card(p)));
-  document.getElementById("q").addEventListener("input", e => {
-    const q = e.target.value.trim().toLowerCase();
-    for (const c of list.children) c.style.display = c.dataset.name.includes(q) ? "" : "none";
-  });
-}).catch(() => { document.getElementById("stamp").textContent = "Could not load site.json yet. Run the update workflow first."; });
-</script>
-</body>
-</html>
+</script></body></html>

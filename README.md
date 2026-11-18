@@ -94,7 +94,7 @@ Good at: the same photo re-sized or re-hosted (brands usually supply one photo t
 ## Limits (read this)
 
 - The `jsonld` source respects `robots.txt`, rate-limits itself, and does not bypass bot protection. Big marketplaces often block GitHub's datacenter IPs and forbid scraping in their terms; those stores will show as a source error, not break the run. Prefer stores that publish JSON-LD, or add an adapter for an official API (see `pricewatch/sources/base.py`).
-- A static site can't search arbitrary products live. Products are the ones in the watchlist.
+- The Pages site (`site/index.html`) searches live by calling the Hugging Face Space; the old watchlist view is `site/watchlist.html`.
 - Cars: on-road price depends on city and variant, so treat them as a separate category later.
 
 ## Layout

@@ -129,6 +129,18 @@ def search(query, photo, kind, gender, min_similarity):
     return "\n\n".join(lines), rows, rejected
 
 
+def api_find(query, photo, kind, gender, min_similarity):
+    """JSON endpoint used by the GitHub Pages site (api_name="find")."""
+    req = Request(query=query or "", photo=photo,
+                  category="clothing" if kind == "Clothing & shoes" else "general",
+                  gender={"Men": "men", "Women": "women"}.get(gender),
+                  min_similarity=min_similarity)
+    try:
+        return {"ok": True, **find(req, PROVIDER, EMBEDDER, offers_cache=cached_search)}
+    except (ValueError, SearchError) as exc:
+        return {"ok": False, "error": str(exc)}
+
+
 with gr.Blocks(title="pricewatch") as demo:
     gr.Markdown("# pricewatch\nType a product name, upload a photo, or both. "
                 "I find the lowest price across stores and show how much each one marks it up.")
@@ -151,6 +163,8 @@ with gr.Blocks(title="pricewatch") as demo:
     filtered = gr.Markdown()
     go.click(search, [query, photo, kind, gender, min_sim], [summary, table, filtered])
     query.submit(search, [query, photo, kind, gender, min_sim], [summary, table, filtered])
+    _j = gr.JSON(visible=False)
+    gr.Button(visible=False).click(api_find, [query, photo, kind, gender, min_sim], _j, api_name="find")
 
 if __name__ == "__main__":
     demo.launch()
