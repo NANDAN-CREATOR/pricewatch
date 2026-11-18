@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from PIL import Image
 
 from .match import Product, filter_offers
-from .search import SearchProvider
+from .search import SearchProvider, clean_country
 from .stats import best_offer_per_store, summarize
 from .vision import Embedder, consensus_similarity, cosine, describe_photo, fetch_images
 
@@ -23,6 +23,7 @@ class Request:
     category: str = "general"  # "clothing" turns on gender / kids rules
     gender: str | None = None  # "men" | "women" | None
     min_similarity: float | None = None  # photo search: drop listings below this similarity
+    country: str = "in"  # market to search (see search.COUNTRIES)
 
 
 def find(req: Request, provider: SearchProvider, embedder: Embedder | None, offers_cache=None) -> dict:
@@ -49,7 +50,8 @@ def find(req: Request, provider: SearchProvider, embedder: Embedder | None, offe
         why = (" " + " ".join(notes)) if notes else ""
         raise ValueError("I could not work out a search phrase from the photo. Please type a product name too." + why)
 
-    fetched = offers_cache(query) if offers_cache else provider.search(query)
+    country = clean_country(req.country)
+    fetched = offers_cache(query, country) if offers_cache else provider.search(query, country)
     # a cache may return (offers, fetched_at_iso) so the page shows when the prices were really read
     raw, checked_at = fetched if isinstance(fetched, tuple) else (fetched, datetime.now(timezone.utc).isoformat(timespec="seconds"))
 
@@ -93,4 +95,4 @@ def find(req: Request, provider: SearchProvider, embedder: Embedder | None, offe
             row["looks_same"] = None if sim is None else sim >= flag_below
             row["checked_at"] = checked_at
     return {"query": query, "photo_info": photo_info, "summary": summary, "rejected": rejected,
-            "notes": notes, "listings_found": len(raw), "checked_at": checked_at}
+            "notes": notes, "listings_found": len(raw), "checked_at": checked_at, "country": country}

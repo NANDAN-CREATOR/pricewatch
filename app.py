@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 import gradio as gr
 
 from pricewatch.finder import PHOTO_MIN_SIMILARITY, Request, find
-from pricewatch.search import FirstAccepted, SearchError
+from pricewatch.search import COUNTRIES, FirstAccepted, SearchError, clean_country
 from pricewatch.search.searchapi import SearchApiShopping
 from pricewatch.search.serpapi import SerpApiShopping
 from pricewatch.vision import ClipEmbedder
@@ -46,9 +46,9 @@ _cache: dict[str, tuple[float, list, str]] = {}
 _budget = {"day": "", "used": 0}
 
 
-def cached_search(query: str):
+def cached_search(query: str, country: str = "in"):
     """Search with a 12h cache and a daily cap, so repeated questions do not burn the free quota."""
-    key = " ".join(query.lower().split())
+    key = clean_country(country) + "|" + " ".join(query.lower().split())
     now = time.time()
     with _lock:
         hit = _cache.get(key)
@@ -61,7 +61,7 @@ def cached_search(query: str):
             raise SearchError("The free daily search limit for this app is used up. Try again tomorrow.")
         _budget["used"] += 1
     try:
-        offers = PROVIDER.search(query)
+        offers = PROVIDER.search(query, country)
     except Exception:
         with _lock:
             _budget["used"] -= 1  # a failed call should not use up the allowance
@@ -72,8 +72,14 @@ def cached_search(query: str):
     return offers, stamp
 
 
-def inr(n: float) -> str:
-    """Indian digit grouping: 1234567 -> ₹12,34,567"""
+SYMBOLS = {"INR": "₹", "USD": "$", "GBP": "£", "CAD": "CA$", "AUD": "A$", "AED": "AED ", "SGD": "S$", "EUR": "€"}
+
+
+def money(n: float, currency: str = "INR") -> str:
+    """₹12,34,567 for rupees (Indian digit grouping); $1,234,567 style for the rest."""
+    sym = SYMBOLS.get(currency, currency + " ")
+    if currency != "INR":
+        return f"{sym}{n:,.0f}"
     s = f"{int(round(n))}"
     head, tail = s[:-3], s[-3:]
     if head:
@@ -84,20 +90,21 @@ def inr(n: float) -> str:
         if head:
             groups.insert(0, head)
         s = ",".join(groups) + "," + tail
-    return "₹" + s
+    return sym + s
 
 
 def pct(v) -> str:
     return "-" if v is None else f"{v:+.1f}%"
 
 
-def search(query, photo, kind, gender, min_similarity):
+def search(query, photo, kind, gender, min_similarity, country="in"):
     req = Request(
         query=query or "",
         photo=photo,
         category="clothing" if kind == "Clothing & shoes" else "general",
         gender={"Men": "men", "Women": "women"}.get(gender),
         min_similarity=min_similarity,
+        country=country,
     )
     try:
         out = find(req, PROVIDER, EMBEDDER, offers_cache=cached_search)
@@ -109,6 +116,8 @@ def search(query, photo, kind, gender, min_similarity):
         lines.append(f"*(guessed from your photo: {out['photo_info']['color']} {out['photo_info']['category']}. "
                      "Add the brand and model in the box for a sharper result.)*")
     s = out["summary"]
+    cur = s["currency"] if s else "INR"
+    inr = lambda n: money(n, cur)  # noqa: E731
     if not s:
         lines.append(f"No matching listings. {out['listings_found']} raw listings were found and all were filtered out "
                      "(wrong product, wrong gender, accessories or used items). Try a more general name.")
@@ -141,12 +150,12 @@ def search(query, photo, kind, gender, min_similarity):
     return "\n\n".join(lines), rows, rejected
 
 
-def api_find(query, photo, kind, gender, min_similarity):
+def api_find(query, photo, kind, gender, min_similarity, country="in"):
     """JSON endpoint used by the GitHub Pages site (api_name="find")."""
     req = Request(query=query or "", photo=photo,
                   category="clothing" if kind == "Clothing & shoes" else "general",
                   gender={"Men": "men", "Women": "women"}.get(gender),
-                  min_similarity=min_similarity)
+                  min_similarity=min_similarity, country=country)
     try:
         return {"ok": True, **find(req, PROVIDER, EMBEDDER, offers_cache=cached_search)}
     except (ValueError, SearchError) as exc:
@@ -163,6 +172,7 @@ with gr.Blocks(title="pricewatch") as demo:
             with gr.Row():
                 kind = gr.Radio(["Anything", "Clothing & shoes"], value="Anything", label="Type")
                 gender = gr.Radio(["Any", "Men", "Women"], value="Any", label="Gender (clothing)")
+            country = gr.Dropdown([(n, c) for c, (n, _) in COUNTRIES.items()], value="in", label="Country")
             min_sim = gr.Slider(0.5, 0.95, value=PHOTO_MIN_SIMILARITY, step=0.01,
                                 label="Photo match strictness (higher = only very similar items)")
             go = gr.Button("Find prices", variant="primary")
@@ -173,10 +183,10 @@ with gr.Blocks(title="pricewatch") as demo:
                  "Image similarity", "Looks same?", "Link"],
         datatype=["str"] * 8 + ["markdown"], interactive=False, wrap=True)
     filtered = gr.Markdown()
-    go.click(search, [query, photo, kind, gender, min_sim], [summary, table, filtered])
-    query.submit(search, [query, photo, kind, gender, min_sim], [summary, table, filtered])
+    go.click(search, [query, photo, kind, gender, min_sim, country], [summary, table, filtered])
+    query.submit(search, [query, photo, kind, gender, min_sim, country], [summary, table, filtered])
     _j = gr.JSON(visible=False)
-    gr.Button(visible=False).click(api_find, [query, photo, kind, gender, min_sim], _j, api_name="find")
+    gr.Button(visible=False).click(api_find, [query, photo, kind, gender, min_sim, country], _j, api_name="find")
 
 if __name__ == "__main__":
     demo.launch()
