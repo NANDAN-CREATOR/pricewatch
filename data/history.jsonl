@@ -12,3 +12,17 @@
 {"ts": "2026-11-18T14:52:17+00:00", "product_id": "iphone-15-128", "store": "StoreA", "price": 65900.0, "mrp": 79900.0}
 {"ts": "2026-11-18T14:52:17+00:00", "product_id": "iphone-15-128", "store": "StoreB", "price": 63990.0, "mrp": 79900.0}
 {"ts": "2026-11-18T14:52:17+00:00", "product_id": "iphone-15-128", "store": "StoreC", "price": 66499.0, "mrp": 69900.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "levis-511-slim-jeans-men", "store": "StoreA", "price": 2799.0, "mrp": 4499.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "levis-511-slim-jeans-men", "store": "StoreB", "price": 2399.0, "mrp": 3999.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "levis-511-slim-jeans-men", "store": "StoreC", "price": 3199.0, "mrp": 3999.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "levis-511-slim-jeans-men", "store": "StoreD", "price": 2999.0, "mrp": 5999.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "adidas-essentials-track-pants-women", "store": "StoreA", "price": 2799.0, "mrp": 3999.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "adidas-essentials-track-pants-women", "store": "StoreB", "price": 2499.0, "mrp": 3999.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "adidas-essentials-track-pants-women", "store": "StoreC", "price": 2999.0, "mrp": 3499.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "sony-wh1000xm5", "store": "StoreA", "price": 26990.0, "mrp": 34990.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "sony-wh1000xm5", "store": "StoreB", "price": 24990.0, "mrp": 39990.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "sony-wh1000xm5", "store": "StoreC", "price": 27490.0, "mrp": 29990.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "sony-wh1000xm5", "store": "StoreD", "price": 29900.0, "mrp": 49990.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "iphone-15-128", "store": "StoreA", "price": 65900.0, "mrp": 79900.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "iphone-15-128", "store": "StoreB", "price": 63990.0, "mrp": 79900.0}
+{"ts": "2026-11-18T17:01:01+00:00", "product_id": "iphone-15-128", "store": "StoreC", "price": 66499.0, "mrp": 69900.0}
