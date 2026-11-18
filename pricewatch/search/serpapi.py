@@ -11,7 +11,7 @@ import urllib.request
 
 from ..models import Offer
 from ..normalize import parse_price
-from . import SearchError
+from . import SearchAuthError, SearchError
 
 URL = "https://serpapi.com/search.json"
 
@@ -69,7 +69,7 @@ class SerpApiShopping:
                 data = json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
             if exc.code in (401, 403):
-                raise SearchError("The search API key was rejected. Check the SERPAPI_KEY secret.") from None
+                raise SearchAuthError("The search API key was rejected. Check the SERPAPI_KEY secret.") from None
             if exc.code == 429:
                 raise SearchError("The search API quota is used up for now. Try again later.") from None
             raise SearchError(f"The search API returned an error (HTTP {exc.code}).") from None

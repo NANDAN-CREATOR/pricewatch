@@ -14,14 +14,15 @@ from datetime import datetime, timezone
 import gradio as gr
 
 from pricewatch.finder import PHOTO_MIN_SIMILARITY, Request, find
-from pricewatch.search import SearchError
+from pricewatch.search import FirstAccepted, SearchError
+from pricewatch.search.searchapi import SearchApiShopping
 from pricewatch.search.serpapi import SerpApiShopping
 from pricewatch.vision import ClipEmbedder, GpuEmbedder
 
 MAX_SEARCHES_PER_DAY = int(os.environ.get("MAX_SEARCHES_PER_DAY", "8"))  # protects the free search quota
 CACHE_SECONDS = 12 * 3600
 
-PROVIDER = SerpApiShopping()
+PROVIDER = FirstAccepted([SearchApiShopping(), SerpApiShopping()])  # whichever service the key belongs to
 try:
     EMBEDDER = GpuEmbedder(ClipEmbedder())
     if os.environ.get("SPACE_ID"):

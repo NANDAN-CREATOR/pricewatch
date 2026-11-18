@@ -178,3 +178,27 @@ def test_errors_and_missing_input():
 def test_consensus_similarity_is_one_for_identical_vectors():
     v = np.tile(np.array([[1.0, 0, 0]]), (4, 1))
     assert np.allclose(consensus_similarity(v), 1.0)
+
+
+# ---------- SearchApi.io ----------
+def test_parse_searchapi_results():
+    from pricewatch.search.searchapi import parse_results as parse
+    offers = {o.store: o for o in parse({"shopping_results": [
+        {"title": "Levi's 511 Jeans", "seller": "StoreA", "extracted_price": 2799.0, "product_link": "https://g/a", "thumbnail": "data:x"},
+        {"title": "Levi's 511 Jeans", "seller": "StoreB", "price": "₹999", "durability": "Pre-owned"},
+        {"title": "no price", "seller": "StoreC"}]})}
+    assert set(offers) == {"StoreA", "StoreB"} and offers["StoreA"].price == 2799.0
+    assert "(Pre-owned)" in offers["StoreB"].title
+
+
+def test_first_accepted_falls_through_on_wrong_service_key():
+    from pricewatch.search import FirstAccepted, SearchAuthError
+
+    class Bad:
+        name = "bad"
+        def search(self, q): raise SearchAuthError("no")
+    good = FakeProvider([Offer("S", "x", 1)])
+    chain = FirstAccepted([Bad(), good])
+    assert len(chain.search("q")) == 1
+    with pytest.raises(SearchError, match="both"):
+        FirstAccepted([Bad(), Bad()]).search("q")
