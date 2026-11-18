@@ -44,9 +44,10 @@ def find(req: Request, provider: SearchProvider, embedder: Embedder | None, offe
                     photo_info = describe_photo(req.photo, embedder, req.gender)
                     query = photo_info["query"]
             except Exception as exc:  # model/GPU hiccup: fall back to text only
-                notes.append(f"The image model failed ({type(exc).__name__}), so the photo was not used.")
+                notes.append(f"The image model failed ({type(exc).__name__}: {str(exc)[:160]}), so the photo was not used.")
     if not query:
-        raise ValueError("I could not work out a search phrase from the photo. Please type a product name too.")
+        why = (" " + " ".join(notes)) if notes else ""
+        raise ValueError("I could not work out a search phrase from the photo. Please type a product name too." + why)
 
     fetched = offers_cache(query) if offers_cache else provider.search(query)
     # a cache may return (offers, fetched_at_iso) so the page shows when the prices were really read
