@@ -17,16 +17,26 @@ from pricewatch.finder import PHOTO_MIN_SIMILARITY, Request, find
 from pricewatch.search import FirstAccepted, SearchError
 from pricewatch.search.searchapi import SearchApiShopping
 from pricewatch.search.serpapi import SerpApiShopping
-from pricewatch.vision import ClipEmbedder, GpuEmbedder
+from pricewatch.vision import ClipEmbedder
 
 MAX_SEARCHES_PER_DAY = int(os.environ.get("MAX_SEARCHES_PER_DAY", "8"))  # protects the free search quota
 CACHE_SECONDS = 12 * 3600
 
 PROVIDER = FirstAccepted([SearchApiShopping(), SerpApiShopping()])  # whichever service the key belongs to
+if os.environ.get("SPACE_ID"):
+    try:  # a ZeroGPU Space refuses to start unless one @spaces.GPU function exists; ours is never called
+        import spaces
+
+        @spaces.GPU
+        def _gpu_placeholder():
+            return None
+    except ImportError:
+        pass
+
 try:
-    EMBEDDER = GpuEmbedder(ClipEmbedder())
+    EMBEDDER = ClipEmbedder()
     if os.environ.get("SPACE_ID"):
-        EMBEDDER.inner.load()  # load weights once at startup on the Space
+        EMBEDDER.load()  # load weights once at startup on the Space
 except Exception as exc:  # the app still works for name-only price search
     print(f"[pricewatch] image model unavailable: {exc!r}")
     EMBEDDER = None

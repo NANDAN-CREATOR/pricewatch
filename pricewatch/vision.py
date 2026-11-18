@@ -5,8 +5,7 @@ Two jobs:
   2. image <-> image similarity, to check that store listings show the same product.
 
 CLIP maps images and text into one vector space, so "how alike are these two pictures" is just
-the cosine of two vectors. The model is loaded lazily; on a Hugging Face ZeroGPU Space the
-embedding calls are wrapped with @spaces.GPU.
+the cosine of two vectors. The model is loaded lazily; it runs on CPU, so it works for anonymous visitors on a free Space.
 """
 
 from __future__ import annotations
@@ -22,7 +21,6 @@ import numpy as np
 from PIL import Image
 
 CLIP_MODEL = "openai/clip-vit-base-patch32"
-ON_SPACE = bool(os.environ.get("SPACE_ID"))
 
 CATEGORIES = [
     "jeans", "t-shirt", "polo t-shirt", "shirt", "hoodie", "sweatshirt", "jacket", "sweater", "kurta", "saree",
@@ -59,8 +57,9 @@ class ClipEmbedder:
 
             self._torch = torch
             self._processor = CLIPProcessor.from_pretrained(self.model_id)
-            model = CLIPModel.from_pretrained(self.model_id).eval()
-            self._model = model.to("cuda") if ON_SPACE else model
+            # CPU on purpose: CLIP-B/32 takes well under a second per image on CPU, and public
+            # visitors have no ZeroGPU quota (anonymous calls hit ZeroGPUQuotaExceeded).
+            self._model = CLIPModel.from_pretrained(self.model_id).eval()
         return self
 
     def _to_array(self, feats) -> np.ndarray:
@@ -84,41 +83,6 @@ class ClipEmbedder:
         inputs = {k: v.to(self._model.device) for k, v in inputs.items()}
         with torch.no_grad():
             return self._to_array(self._model.get_text_features(**inputs))
-
-
-def _gpu(fn):
-    """On a ZeroGPU Space, run fn on a GPU slot. Anywhere else, a no-op."""
-    if ON_SPACE:
-        try:
-            import spaces
-
-            return spaces.GPU(fn)
-        except ImportError:
-            pass
-    return fn
-
-
-class GpuEmbedder:
-    """Wraps an embedder so each call runs inside a ZeroGPU slot (required for the Space to start)."""
-
-    def __init__(self, inner: Embedder):
-        self.inner = inner
-
-        @_gpu
-        def _images(images):
-            return inner.embed_images(images)
-
-        @_gpu
-        def _texts(texts):
-            return inner.embed_texts(texts)
-
-        self._images, self._texts = _images, _texts
-
-    def embed_images(self, images):
-        return self._images(images)
-
-    def embed_texts(self, texts):
-        return self._texts(texts)
 
 
 # ---------- photo -> search phrase ----------
