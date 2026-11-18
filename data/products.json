@@ -1,0 +1,84 @@
+{
+ "511-fit-jeans-levis-slim~men": {
+  "id": "511-fit-jeans-levis-slim~men",
+  "name": "Levi's 511 slim fit jeans",
+  "category": "clothing",
+  "gender": "men",
+  "searches": 0,
+  "last_seen": "2026-11-18T18:55:13+00:00",
+  "stores": [
+   {
+    "store": "Myntra",
+    "price": 839.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Levi%27s+511+slim+fit+jeans&prds=catalogid:15854593566793142587,gpcid:2943828412814376004,headlineOfferDocid:871613351566743247,imageDocid:9887806061868098371,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Myntra - MNow",
+    "price": 951.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Levi%27s+511+slim+fit+jeans&prds=catalogid:4058284859889273461,gpcid:2199526369851765959,headlineOfferDocid:8365247580451175018,imageDocid:5159434657646521558,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "AJIO.com",
+    "price": 1116.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Levi%27s+511+slim+fit+jeans&prds=catalogid:13653969754363370137,gpcid:13113855190097605195,headlineOfferDocid:8322647987714836702,imageDocid:9923368946650007464,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Amazon.in",
+    "price": 1259.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Levi%27s+511+slim+fit+jeans&prds=catalogid:4455645219487032174,gpcid:13796961143096715210,headlineOfferDocid:672755406275364281,imageDocid:9596226737149668188,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Levi Strauss India",
+    "price": 1343.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Levi%27s+511+slim+fit+jeans&prds=catalogid:3945319291710944636,gpcid:12871287414093488331,headlineOfferDocid:17803244449122887905,imageDocid:8791412451364351935,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   }
+  ]
+ },
+ "headphones-sony-wh1000xm5": {
+  "id": "headphones-sony-wh1000xm5",
+  "name": "Sony WH-1000XM5 headphones",
+  "category": "general",
+  "gender": null,
+  "searches": 0
+ },
+ "evara-kurti-short-sleeveless-veda~women": {
+  "id": "evara-kurti-short-sleeveless-veda~women",
+  "name": "Evara Veda short sleeveless kurti",
+  "category": "clothing",
+  "gender": "women",
+  "searches": 0,
+  "last_seen": "2026-11-18T18:55:13+00:00",
+  "stores": [
+   {
+    "store": "KUDDI",
+    "price": 399.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Evara+Veda+short+sleeveless+kurti&prds=headlineOfferDocid:9681776905765901400,imageDocid:15908908034939633441,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Amazon.in",
+    "price": 499.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Evara+Veda+short+sleeveless+kurti&prds=headlineOfferDocid:7472141638855961502,imageDocid:3906200942754348805,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "ruvaya.in",
+    "price": 499.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Evara+Veda+short+sleeveless+kurti&prds=headlineOfferDocid:16675513938607164493,imageDocid:15902716567451436952,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Sivasamgi",
+    "price": 649.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Evara+Veda+short+sleeveless+kurti&prds=catalogid:9894360437563230660,gpcid:5619996746977757870,headlineOfferDocid:4005657088376101244,imageDocid:223540900523512690,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Evara",
+    "price": 699.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Evara+Veda+short+sleeveless+kurti&prds=catalogid:17678099944704890472,gpcid:16007974707799334343,headlineOfferDocid:17327517088455465416,imageDocid:11219182132302757154,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Dri By Himadri",
+    "price": 999.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Evara+Veda+short+sleeveless+kurti&prds=catalogid:7545707224976587003,gpcid:17777582389817353061,headlineOfferDocid:13130537353940340647,imageDocid:5282381952988697534,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   }
+  ]
+ }
+}
