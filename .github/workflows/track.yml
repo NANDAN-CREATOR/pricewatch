@@ -1,0 +1,51 @@
+name: Track prices over time
+
+on:
+  schedule:
+    - cron: "23 3 */2 * *"   # every other day, 03:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: update          # shares the group with update.yml so the two never push or deploy at once
+  cancel-in-progress: false
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install Pillow numpy
+      - name: Check tracked products
+        env:
+          SEARCHAPI_KEY: ${{ secrets.SEARCHAPI_KEY }}
+        run: python -m pricewatch.tracker
+      - name: Commit history
+        run: |
+          git config user.name "pricewatch-bot"
+          git config user.email "pricewatch-bot@users.noreply.github.com"
+          git add data/trends.jsonl site/trends.json
+          git diff --cached --quiet || git commit -m "chore: track prices [skip ci]"
+          git pull --rebase -q origin main
+          git push
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: track
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

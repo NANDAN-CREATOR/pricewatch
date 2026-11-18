@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Price trends · pricewatch</title>
+<meta name="description" content="Prices of tracked products over time, with a buy-or-wait signal and price drops since the last check.">
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#0f172a;--muted:#64748b;--line:#e5e8f0;--brand:#4f46e5;--good:#059669;--good-bg:#d1fae5;--warn:#b45309;--warn-bg:#fef3c7;--bad:#be123c;--bad-bg:#ffe4e6;--shadow:0 1px 2px rgba(15,23,42,.05),0 8px 24px rgba(15,23,42,.06)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+header.top{background:var(--card);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.15rem;color:var(--ink)}.logo:hover{text-decoration:none}
+.logo i{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#4338ca);color:#fff}
+nav a{color:var(--muted);font-size:.95rem;font-weight:500;margin-left:18px}nav a.on{color:var(--ink)}
+.hero{background:linear-gradient(180deg,#eef0ff,var(--bg));padding:36px 0 8px}
+.hero h1{margin:0 0 6px;font-size:clamp(1.6rem,4vw,2.2rem);letter-spacing:-.02em}
+.hero p{margin:0;color:var(--muted);max-width:640px}
+main{padding:22px 0 56px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:20px;margin-bottom:18px}
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;align-items:flex-start}
+.head h2{margin:0;font-size:1.2rem}
+.badge{font-size:.8rem;font-weight:700;padding:5px 11px;border-radius:999px;white-space:nowrap}
+.low{background:var(--good-bg);color:#047857}.high{background:var(--bad-bg);color:var(--bad)}.fair{background:#e0e7ff;color:#3730a3}.building{background:#eef0f6;color:#475569}
+.vtext{color:var(--muted);font-size:.92rem;margin:4px 0 0}
+.nums{display:flex;flex-wrap:wrap;gap:10px 34px;margin:14px 0 6px}
+.nums small{display:block;color:var(--muted);font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.nums b{font-size:1.35rem;letter-spacing:-.02em}
+svg.spark{width:100%;height:150px;display:block;margin-top:8px}
+.legend{display:flex;gap:16px;font-size:.8rem;color:var(--muted);margin-top:2px}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+table{border-collapse:collapse;width:100%;margin-top:12px;font-size:.92rem}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--muted);font-size:.76rem;text-transform:uppercase;letter-spacing:.05em}
+.chg.dn{color:var(--good);font-weight:600}.chg.up{color:var(--bad);font-weight:600}
+.msg{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;color:var(--muted)}
+.err{color:var(--bad);font-size:.88rem;margin-top:8px}
+.note{color:var(--muted);font-size:.85rem;margin-top:8px}
+footer{border-top:1px solid var(--line);background:var(--card);color:var(--muted);font-size:.85rem;padding:20px 0}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="./"><i><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></i>pricewatch</a>
+  <nav><a href="./">Search</a><a class="on" href="trends.html">Price trends</a></nav>
+</div></header>
+<section class="hero"><div class="wrap"><h1>Price trends</h1>
+<p>A search tool shows today's prices. Here the same products are re-checked every other day, so you can see whether a price is actually low, and which stores just dropped.</p></div></section>
+<main><div class="wrap" id="out"><div class="msg">Loading…</div></div></main>
+<footer><div class="wrap">Prices come from Google Shopping listings, checked every other day. History builds up over time: a buy-or-wait signal needs at least 3 checks. Always confirm the price at the store.</div></footer>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const inr = n => "₹" + Math.round(n).toLocaleString("en-IN");
+const day = iso => new Date(iso).toLocaleDateString(undefined, {day: "numeric", month: "short", year: "numeric"});
+
+function spark(points) {
+  if (points.length < 2) return '<div class="note">The chart appears after the second check.</div>';
+  const W = 600, H = 150, P = 14, all = points.flatMap(p => [p.lowest, p.median]);
+  const lo = Math.min(...all), hi = Math.max(...all), span = hi - lo || 1;
+  const x = i => P + (W - 2 * P) * i / (points.length - 1), y = v => H - P - (H - 2 * P) * (v - lo) / span;
+  const line = (k, c, w) => '<polyline fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linejoin="round" stroke-linecap="round" points="' + points.map((p, i) => x(i).toFixed(1) + "," + y(p[k]).toFixed(1)).join(" ") + '"/>';
+  const dots = points.map((p, i) => '<circle cx="' + x(i).toFixed(1) + '" cy="' + y(p.lowest).toFixed(1) + '" r="3.5" fill="#059669"><title>' + esc(day(p.ts)) + ": lowest " + inr(p.lowest) + "</title></circle>").join("");
+  return '<svg class="spark" viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none" role="img" aria-label="Price over time">' + line("median", "#a5b4fc", 2.5) + line("lowest", "#059669", 3) + dots + '</svg>' +
+    '<div class="legend"><span><i style="background:#059669"></i>Lowest price</span><span><i style="background:#a5b4fc"></i>Median price</span><span>' + inr(lo) + " – " + inr(hi) + "</span></div>";
+}
+
+function card(p) {
+  const v = p.verdict || {code: "building", text: ""};
+  const label = {low: "Good time to buy", high: "Consider waiting", fair: "Fair price", building: "Building history"}[v.code];
+  let h = '<section class="card"><div class="head"><div><h2>' + esc(p.name) + '</h2><p class="vtext">' + esc(v.text) + '</p></div><span class="badge ' + esc(v.code) + '">' + label + '</span></div>';
+  if (p.checks) h += '<div class="nums"><div><small>Lowest now</small><b>' + inr(p.latest_lowest) + '</b></div><div><small>Median now</small><b>' + inr(p.latest_median) + '</b></div><div><small>Lowest ever seen</small><b>' + inr(p.period_low) + '</b></div><div><small>Highest low</small><b>' + inr(p.period_high) + '</b></div><div><small>Checks</small><b>' + p.checks + '</b></div></div>' +
+    '<div class="note">Last checked ' + esc(day(p.latest_date)) + '</div>' + spark(p.points);
+  else h += '<div class="note">No price recorded yet.</div>';
+  if (p.stores && p.stores.length) {
+    h += '<table><tr><th>Store</th><th>Price</th><th>Since last check</th><th></th></tr>' + p.stores.map(s =>
+      '<tr><td>' + esc(s.store) + '</td><td>' + inr(s.price) + '</td><td>' + (s.change_pct == null ? "–" : '<span class="chg ' + (s.change_pct < 0 ? "dn" : s.change_pct > 0 ? "up" : "") + '">' + (s.change_pct > 0 ? "+" : "") + s.change_pct.toFixed(1) + '%</span>') + '</td><td>' +
+      (/^https?:/.test(s.url || "") ? '<a href="' + esc(s.url) + '" target="_blank" rel="noopener noreferrer">View</a>' : "") + '</td></tr>').join("") + '</table>';
+  }
+  if (p.error) h += '<div class="err">Last check problem: ' + esc(p.error) + '</div>';
+  return h + '</section>';
+}
+
+fetch("trends.json?x=" + Date.now()).then(r => { if (!r.ok) throw 0; return r.json(); }).then(d => {
+  $("out").innerHTML = d.products && d.products.length ? d.products.map(card).join("") : '<div class="msg">No tracked products yet.</div>';
+}).catch(() => { $("out").innerHTML = '<div class="msg"><b>No history yet.</b> The first check runs on the next schedule (every other day). Prices are recorded each time, and charts and buy-or-wait signals appear as the history grows.</div>'; });
+</script>
+</body>
+</html>

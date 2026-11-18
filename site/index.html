@@ -92,7 +92,7 @@ footer{border-top:1px solid var(--line);background:var(--card);color:var(--muted
 <body>
 <header class="top"><div class="wrap">
   <a class="logo" href="./"><i><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></i>pricewatch</a>
-  <nav><a href="watchlist.html">Tracked watchlist</a></nav>
+  <nav><a href="trends.html">Price trends</a></nav>
 </div></header>
 
 <section class="hero"><div class="wrap">
@@ -195,6 +195,20 @@ function card(r, best, s, topMatch) {
     '<div class="date">Price checked ' + esc(when(r.checked_at || s.checked_at)) + '</div>' + link + '</div></article>';
 }
 
+// Remember what each search showed (in this browser only) and compare next time.
+function seenBefore(d, s) {
+  const key = d.query.toLowerCase().replace(/\s+/g, " ").trim(); let all = {}, note = "";
+  try { all = JSON.parse(localStorage.getItem("pw_seen") || "{}"); } catch {}
+  const prev = all[key];
+  if (prev && prev.lowest) {
+    const ch = (s.lowest.price - prev.lowest) / prev.lowest * 100, days = Math.round((new Date(d.checked_at) - new Date(prev.t)) / 864e5);
+    if (days >= 1 && Math.abs(ch) >= 0.5) note = '<div class="guess" style="background:' + (ch < 0 ? "#ecfdf5;border-color:#a7f3d0;color:#047857" : "#fff1f2;border-color:#fecdd3;color:#be123c") + '">Since you last searched this (' + days + ' day' + (days > 1 ? "s" : "") + ' ago) the lowest price went <b>' + (ch < 0 ? "down " : "up ") + Math.abs(ch).toFixed(1) + '%</b>: ' + inr(prev.lowest) + ' → ' + inr(s.lowest.price) + '.</div>';
+  }
+  if (!prev || new Date(d.checked_at) - new Date(prev.t) > 36e5) all[key] = {t: d.checked_at, lowest: s.lowest.price};
+  try { const keys = Object.keys(all); if (keys.length > 60) delete all[keys[0]]; localStorage.setItem("pw_seen", JSON.stringify(all)); } catch {}
+  return note;
+}
+
 function render(d) {
   const out = $("out");
   if (!d.ok) { out.innerHTML = '<div class="msg err">' + esc(d.error) + '</div>'; return; }
@@ -215,6 +229,7 @@ function render(d) {
     '<div class="stat"><small>Stores compared</small><b>' + s.store_count + '</b><span>' + (rows.length && s.stores[rows.length - 1].markup_vs_lowest_pct != null ? "highest is " + pct(s.stores[rows.length - 1].markup_vs_lowest_pct) + " above lowest" : "") + '</span></div></div>';
   if (d.photo_used) rows.sort((a, b) => (b.similarity ?? 0) - (a.similarity ?? 0));  // closest to your photo first
   const lowest = r => r.store === s.lowest.store && r.price === s.lowest.price;
+  h += seenBefore(d, s);
   h += '<div class="grid">' + rows.map((r, i) => card(r, lowest(r), d, d.photo_used && i === 0)).join("") + '</div>';
   h += left;
   out.innerHTML = h;

@@ -122,3 +122,13 @@ SerpApi Google Shopping (`SERPAPI_KEY` Space secret), filters wrong products, us
 pictures match, then shows lowest / median / average and each store's markup. Searches are cached
 12 hours and capped per day (`MAX_SEARCHES_PER_DAY`, default 8) to protect the free quota.
 Pushes to `main` sync the app to the Space via `.github/workflows/sync-to-hf.yml` (needs `HF_TOKEN`).
+
+
+## Price trends (what Google Shopping does not give you)
+
+`tracked.json` lists products that are re-checked every other day by `.github/workflows/track.yml`. Each check
+records every store's price in `data/trends.jsonl`; `site/trends.html` then shows, per product, a chart of the
+lowest and median price over time, which stores dropped since the last check, and a buy-or-wait signal (needs
+3+ checks). It needs one GitHub Actions secret, `SEARCHAPI_KEY`. Each check costs one search per product, so keep
+the list short. The site also remembers, in your browser only, what a search showed last time and tells you how the
+lowest price moved since.
