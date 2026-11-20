@@ -170,8 +170,13 @@
   "category": "general",
   "gender": "men",
   "searches": 1,
-  "last_seen": "2026-11-19T11:49:08+00:00",
+  "last_seen": "2026-11-20T11:49:54+00:00",
   "stores": [
+   {
+    "store": "Bhasin Brothers",
+    "price": 16500.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:11490214368080065691,imageDocid:2900154541134483416,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
    {
     "store": "Etsy",
     "price": 17112.0,
@@ -183,34 +188,19 @@
     "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:11686786786707041565,imageDocid:13050366034505123391,pvo:3,pvt:a&gl=in&hl=en&udm=28"
    },
    {
-    "store": "Myntra",
-    "price": 22121.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:219042151967974273,gpcid:8948980580536102603,headlineOfferDocid:14072443198295134958,imageDocid:10987798604627508460,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   },
-   {
     "store": "KALKI",
     "price": 22500.0,
     "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:1727754183659439339,gpcid:2850107684165353975,headlineOfferDocid:17173298549790519225,imageDocid:13091364556277586434,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    },
    {
+    "store": "Pernia's Pop Up Shop",
+    "price": 26307.28,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:518072634063487498,gpcid:15027245509330733702,headlineOfferDocid:9759454280210080208,imageDocid:9568767324256143118,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
     "store": "Zoop Men",
     "price": 26990.0,
     "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:17952830077805874419,gpcid:17390119064419444080,headlineOfferDocid:17063751077879980668,imageDocid:3301248864331754581,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "Pernia's Pop Up Shop",
-    "price": 29325.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:96843452795174989,imageDocid:12574104610396765748,pvo:3,pvt:a&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "Blackberrys",
-    "price": 36869.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:7698351426204875306,gpcid:9024327128751381336,headlineOfferDocid:18160769150771342877,imageDocid:16739103875429301642,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "Bhasin Brothers",
-    "price": 36995.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:10740895466663101517,imageDocid:12906386089628909037,pvo:3,pvt:a&gl=in&hl=en&udm=28"
    },
    {
     "store": "Aza Fashions",
