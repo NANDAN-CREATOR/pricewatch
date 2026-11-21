@@ -170,32 +170,22 @@
   "category": "general",
   "gender": "men",
   "searches": 1,
-  "last_seen": "2026-11-20T11:49:54+00:00",
+  "last_seen": "2026-11-21T11:15:33+00:00",
   "stores": [
    {
-    "store": "Bhasin Brothers",
-    "price": 16500.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:11490214368080065691,imageDocid:2900154541134483416,pvo:3,pvt:a&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "Etsy",
-    "price": 17112.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:16625706443275488229,imageDocid:16145773085975742726,pvo:3,pvt:a&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "kalkifashion.com",
-    "price": 20999.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:11686786786707041565,imageDocid:13050366034505123391,pvo:3,pvt:a&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "KALKI",
-    "price": 22500.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:1727754183659439339,gpcid:2850107684165353975,headlineOfferDocid:17173298549790519225,imageDocid:13091364556277586434,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+    "store": "Blackberrys",
+    "price": 14999.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:6410239307160996312,gpcid:2392629030307251252,headlineOfferDocid:14937923830690814326,imageDocid:14172258629316913920,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    },
    {
     "store": "Pernia's Pop Up Shop",
-    "price": 26307.28,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:518072634063487498,gpcid:15027245509330733702,headlineOfferDocid:9759454280210080208,imageDocid:9568767324256143118,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+    "price": 22197.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:10666727690734335404,imageDocid:14294486690797446818,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "KALKI",
+    "price": 24950.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:2619836318902596411,gpcid:12125844205621845341,headlineOfferDocid:12505690445118732796,imageDocid:6163617980173820015,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    },
    {
     "store": "Zoop Men",
@@ -204,11 +194,56 @@
    },
    {
     "store": "Aza Fashions",
-    "price": 43036.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:9753822690914987850,imageDocid:5005798287817803119,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+    "price": 32277.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:6477757227582400186,imageDocid:15579578032458054445,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Bhasin Brothers",
+    "price": 36995.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:10740895466663101517,imageDocid:12906386089628909037,pvo:3,pvt:a&gl=in&hl=en&udm=28"
    }
   ],
   "tracked": true,
   "error": null
+ },
+ "perfume-snitch~men": {
+  "id": "perfume-snitch~men",
+  "name": "Snitch Perfume",
+  "category": "general",
+  "gender": "men",
+  "searches": 1,
+  "last_seen": "2026-11-20T14:38:32+00:00",
+  "stores": [
+   {
+    "store": "younickart.com",
+    "price": 315.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Snitch+Perfume&prds=headlineOfferDocid:4275623573151783417,imageDocid:14235441366328667663,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Myntra",
+    "price": 455.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Snitch+Perfume&prds=catalogid:8464917721437536803,headlineOfferDocid:18118538169846130305,imageDocid:4737061300287335387,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "amazon.in",
+    "price": 499.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Snitch+Perfume&prds=headlineOfferDocid:9653121402193228063,imageDocid:12429937070299354767,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Flipkart",
+    "price": 550.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Snitch+Perfume&prds=headlineOfferDocid:9668678269052297395,imageDocid:4794916933208127196,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Shopsy By Flipkart",
+    "price": 550.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Snitch+Perfume&prds=headlineOfferDocid:13115940884313327511,imageDocid:4794916933208127196,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "ajio.com",
+    "price": 1099.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=Snitch+Perfume&prds=headlineOfferDocid:5067743569972198267,imageDocid:15139548381120037367,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   }
+  ]
  }
 }
