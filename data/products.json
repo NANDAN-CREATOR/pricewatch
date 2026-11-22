@@ -170,37 +170,47 @@
   "category": "general",
   "gender": "men",
   "searches": 1,
-  "last_seen": "2026-11-21T11:15:33+00:00",
+  "last_seen": "2026-11-22T11:35:18+00:00",
   "stores": [
    {
-    "store": "Blackberrys",
-    "price": 14999.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:6410239307160996312,gpcid:2392629030307251252,headlineOfferDocid:14937923830690814326,imageDocid:14172258629316913920,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+    "store": "Zoop Men",
+    "price": 20990.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:11848482541625467984,gpcid:15137629831351610993,headlineOfferDocid:11569433869974687666,imageDocid:4442104606289476499,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    },
    {
-    "store": "Pernia's Pop Up Shop",
-    "price": 22197.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:10666727690734335404,imageDocid:14294486690797446818,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+    "store": "Mumbai tailor master",
+    "price": 21500.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:10008731203298226378,gpcid:10509181504995142627,headlineOfferDocid:10569905299364201677,imageDocid:1174450937310387716,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    },
    {
     "store": "KALKI",
-    "price": 24950.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:2619836318902596411,gpcid:12125844205621845341,headlineOfferDocid:12505690445118732796,imageDocid:6163617980173820015,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "Zoop Men",
-    "price": 26990.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:17952830077805874419,gpcid:17390119064419444080,headlineOfferDocid:17063751077879980668,imageDocid:3301248864331754581,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "Aza Fashions",
-    "price": 32277.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:6477757227582400186,imageDocid:15579578032458054445,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+    "price": 26800.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:851398878903451371,gpcid:9420813372773650433,headlineOfferDocid:14073324855735618200,imageDocid:12526015985583071037,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    },
    {
     "store": "Bhasin Brothers",
-    "price": 36995.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:10740895466663101517,imageDocid:12906386089628909037,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+    "price": 26995.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:16195085055346860625,imageDocid:8342073919875659095,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Curato",
+    "price": 33480.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:3286162318096695017,imageDocid:17804145937434683106,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Brahaan by Narains",
+    "price": 36500.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:1591768374338573987,gpcid:3826699319363483572,headlineOfferDocid:1871773911546748646,imageDocid:8849009062546657806,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "heritage1968.com",
+    "price": 49995.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:1238179939183802690,imageDocid:6602988600848088407,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Myntra",
+    "price": 58000.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:10170281062804838590,gpcid:2977339804274943930,headlineOfferDocid:8948409663141007638,imageDocid:14019279797942416129,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    }
   ],
   "tracked": true,
