@@ -170,47 +170,57 @@
   "category": "general",
   "gender": "men",
   "searches": 1,
-  "last_seen": "2026-11-22T11:35:18+00:00",
+  "last_seen": "2026-11-23T12:59:35+00:00",
   "stores": [
    {
-    "store": "Zoop Men",
-    "price": 20990.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:11848482541625467984,gpcid:15137629831351610993,headlineOfferDocid:11569433869974687666,imageDocid:4442104606289476499,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "Mumbai tailor master",
-    "price": 21500.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:10008731203298226378,gpcid:10509181504995142627,headlineOfferDocid:10569905299364201677,imageDocid:1174450937310387716,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "KALKI",
-    "price": 26800.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:851398878903451371,gpcid:9420813372773650433,headlineOfferDocid:14073324855735618200,imageDocid:12526015985583071037,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "Bhasin Brothers",
-    "price": 26995.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:16195085055346860625,imageDocid:8342073919875659095,pvo:3,pvt:a&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "Curato",
-    "price": 33480.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:3286162318096695017,imageDocid:17804145937434683106,pvo:3,pvt:a&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "Brahaan by Narains",
-    "price": 36500.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:1591768374338573987,gpcid:3826699319363483572,headlineOfferDocid:1871773911546748646,imageDocid:8849009062546657806,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
-   },
-   {
-    "store": "heritage1968.com",
-    "price": 49995.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:1238179939183802690,imageDocid:6602988600848088407,pvo:3,pvt:a&gl=in&hl=en&udm=28"
-   },
-   {
     "store": "Myntra",
-    "price": 58000.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:10170281062804838590,gpcid:2977339804274943930,headlineOfferDocid:8948409663141007638,imageDocid:14019279797942416129,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+    "price": 3499.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:15356239566593754776,imageDocid:15511564634016401925,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Tata CLiQ Fashion",
+    "price": 3920.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:9256675441524310439,imageDocid:7330970625169239542,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Amazon.in",
+    "price": 4199.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:16109531895844358965,gpcid:6986831252182619453,headlineOfferDocid:10339425024961331777,imageDocid:13219723404876131567,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "GoGentleman Lifestyle",
+    "price": 4299.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:12269035695089339763,gpcid:17824986385586660190,headlineOfferDocid:11631115661433404435,imageDocid:14446883736785353787,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "amazon.in",
+    "price": 4495.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:12204460587834483147,imageDocid:3985435122606010999,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Myntra - MNow",
+    "price": 5084.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:7399516420382669868,imageDocid:6297164378443011210,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Tumuh",
+    "price": 5190.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:12006360039254757641,gpcid:15269578608149247738,headlineOfferDocid:13721277476863607313,imageDocid:333434077815336837,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "AJIO.com",
+    "price": 8399.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:2978350252745132411,gpcid:5772344335092224965,headlineOfferDocid:11342779863831854336,imageDocid:6072922843677183083,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "French Crown",
+    "price": 10833.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:3438918023159304873,gpcid:12847016238734715149,headlineOfferDocid:6203447655645736327,imageDocid:3040752258534804272,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Marks & Spencer",
+    "price": 12999.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:11840863373278400369,gpcid:10894746691517390847,headlineOfferDocid:1798115869313157423,imageDocid:14582358716188900121,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    }
   ],
   "tracked": true,
@@ -253,6 +263,51 @@
     "store": "ajio.com",
     "price": 1099.0,
     "url": "https://www.google.com/search?ibp=oshop&q=Snitch+Perfume&prds=headlineOfferDocid:5067743569972198267,imageDocid:15139548381120037367,pvo:3,pvt:hg&gl=in&hl=en&udm=28"
+   }
+  ]
+ },
+ "rolex": {
+  "id": "rolex",
+  "name": "ROLEX",
+  "category": "general",
+  "gender": null,
+  "searches": 1,
+  "last_seen": "2026-11-22T16:56:00+00:00",
+  "stores": [
+   {
+    "store": "Moyer Fine Jewelers",
+    "price": 648083.04,
+    "url": "https://www.google.com/search?ibp=oshop&q=ROLEX&prds=headlineOfferDocid:17676728738023912911,imageDocid:13047500650214711392,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Chrono24.in",
+    "price": 653562.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=ROLEX&prds=catalogid:10078720226899168526,gpcid:7660831871003927303,headlineOfferDocid:9838909470264664934,imageDocid:17456593255808239057,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "LWM Italia Srl",
+    "price": 676159.76,
+    "url": "https://www.google.com/search?ibp=oshop&q=ROLEX&prds=headlineOfferDocid:10545075186637763300,imageDocid:15321897110731380337,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Luxe Outlet",
+    "price": 748356.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=ROLEX&prds=catalogid:6740224321233699819,gpcid:15308250574486831947,headlineOfferDocid:2674125901460912172,imageDocid:10850142922282591753,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Vintage Paris",
+    "price": 904935.62,
+    "url": "https://www.google.com/search?ibp=oshop&q=ROLEX&prds=catalogid:11570082200580389478,gpcid:11555766143126133773,headlineOfferDocid:15026728512276540809,imageDocid:17946829097569421073,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "12-24.com",
+    "price": 1077050.08,
+    "url": "https://www.google.com/search?ibp=oshop&q=ROLEX&prds=catalogid:17588216977529912755,gpcid:493002856241713246,headlineOfferDocid:8098022488302308429,imageDocid:4559032729429603634,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Luxepolis.com",
+    "price": 1100000.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=ROLEX&prds=catalogid:17590961623690455749,gpcid:12781080012624214370,headlineOfferDocid:14908739312527294492,imageDocid:12425273210028178553,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    }
   ]
  }
