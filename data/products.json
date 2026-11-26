@@ -170,37 +170,67 @@
   "category": "general",
   "gender": "men",
   "searches": 1,
-  "last_seen": "2026-11-25T13:05:25+00:00",
+  "last_seen": "2026-11-26T12:45:36+00:00",
   "stores": [
    {
-    "store": "amazon.in",
-    "price": 18208.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:17308107769741594214,gpcid:2433208779055489372,headlineOfferDocid:2262643533882223777,imageDocid:17275410224167816499,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+    "store": "abfrl.in",
+    "price": 14749.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:11644283791373520005,imageDocid:13007629866868853850,pvo:3,pvt:a&gl=in&hl=en&udm=28"
    },
    {
-    "store": "Zoop Men",
-    "price": 20990.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:11848482541625467984,gpcid:15137629831351610993,headlineOfferDocid:11569433869974687666,imageDocid:4442104606289476499,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+    "store": "p&h by priyanshu",
+    "price": 15999.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:10373022145526401183,gpcid:14676693658842559203,headlineOfferDocid:268221336300470190,imageDocid:15007021836489150460,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    },
    {
-    "store": "Bhasin Brothers",
-    "price": 26995.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:16195085055346860625,imageDocid:8342073919875659095,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+    "store": "Pratham & Gyanesh",
+    "price": 17500.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:7098904549544976136,imageDocid:18365945250655304537,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Tumuh",
+    "price": 17999.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:7166270554143367783,gpcid:631869722484197655,headlineOfferDocid:3231735761909139854,imageDocid:16888801766907140307,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "French Crown Global",
+    "price": 20338.65,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:5115554039352919243,gpcid:842383670068352019,headlineOfferDocid:200121150111626948,imageDocid:17711756148395046530,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Bonsoir",
+    "price": 22995.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:17694355851772717308,gpcid:12358585219247434774,headlineOfferDocid:5594352145141871544,imageDocid:10114291575343913068,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Bhavya Bhasin",
+    "price": 23700.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:17687729037759513932,gpcid:16594749052867415292,headlineOfferDocid:625701716174522448,imageDocid:6452454247035904523,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Zoba Homme",
+    "price": 26500.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:8128099293643609158,imageDocid:12177279890515453946,pvo:3,pvt:a&gl=in&hl=en&udm=28"
    },
    {
     "store": "KALKI",
-    "price": 28000.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:11891050393949367327,gpcid:4705229120782192556,headlineOfferDocid:13771882351389165968,imageDocid:5737882166037052946,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+    "price": 26800.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:851398878903451371,gpcid:9420813372773650433,headlineOfferDocid:14073324855735618200,imageDocid:12526015985583071037,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    },
    {
-    "store": "Brahaan by Narains",
-    "price": 36500.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:12324714081897344060,gpcid:3826699319363483572,headlineOfferDocid:969456658427696170,imageDocid:8849009062546657806,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+    "store": "Dimple Collection",
+    "price": 29440.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:5315574825674199063,gpcid:9948214831316862416,headlineOfferDocid:10149303764452201195,imageDocid:15727550459140004546,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    },
    {
-    "store": "heritage1968.com",
-    "price": 49995.0,
-    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=headlineOfferDocid:1238179939183802690,imageDocid:12361637647940996796,pvo:3,pvt:a&gl=in&hl=en&udm=28"
+    "store": "Shreeman",
+    "price": 33499.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:6165920975747455301,gpcid:12438919910033334152,headlineOfferDocid:18057911602222784869,imageDocid:11972816907547701390,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
+   },
+   {
+    "store": "Zoop Men",
+    "price": 40990.0,
+    "url": "https://www.google.com/search?ibp=oshop&q=men+tuxedo&prds=catalogid:12158602244528584466,gpcid:7011422599279747467,headlineOfferDocid:14273691355245366843,imageDocid:6818397704867766385,pvo:25,pvt:hg&gl=in&hl=en&udm=28"
    }
   ],
   "tracked": true,
